@@ -44,6 +44,7 @@ G = Traeger.Traeger(Relays)
 
 #Initialize LCD
 lcd = LCDDisplay.LCDDisplay()
+l.setDaemon(True)
 lcd.start()
 
 #Start controller
