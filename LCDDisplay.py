@@ -21,13 +21,14 @@ class LCDDisplay(threading.Thread):
 	
 	def run(self):
 		while True:
+			self.GetButtons()
 			while not self.qP.empty():
 				self.Parameters = self.qP.get()
 			while not self.qT.empty():
 				self.Temps = self.qT.get()
-				
-			self.GetButtons()
+	
 			self.UpdateDisplay()
+			time.sleep(0.1)
 			
 	def UpdateDisplay(self):
 		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Temps[-1][1],self.Temps[-1][2])
@@ -48,13 +49,11 @@ class LCDDisplay(threading.Thread):
 				elif button[1] == 'Up':
 					NewParameters = {'target': self.Parameters['target'] + 5}
 					self.qR.put(NewParameters)
+					print 'blah'
 				elif button[1] == 'Down':
 					NewParameters = {'target': self.Parameters['target'] - 5}
 					self.qR.put(NewParameters)
-
-					
-				
-					
+		
 	def GetCurrentMode(self):	
 		for i in range(len(Modes)):
 			if self.Parameters['mode'] == Modes[i]:
