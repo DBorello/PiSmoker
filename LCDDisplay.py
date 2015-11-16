@@ -49,7 +49,6 @@ class LCDDisplay(threading.Thread):
 				elif button[1] == 'Up':
 					NewParameters = {'target': self.Parameters['target'] + 5}
 					self.qR.put(NewParameters)
-					print 'blah'
 				elif button[1] == 'Down':
 					NewParameters = {'target': self.Parameters['target'] - 5}
 					self.qR.put(NewParameters)
