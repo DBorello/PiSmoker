@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import MAX31865
 import Traeger
 import PID
+import LCDDisplay
 from firebase import firebase
 
 #Start logging
@@ -40,6 +41,10 @@ os.symlink(os.path.join(OutputDir,BaseName+'Temperatures.json'),os.path.join(Out
 
 #Initialize Traeger Object
 G = Traeger.Traeger(Relays)
+
+#Initialize LCD
+lcd = LCDDisplay.LCDDisplay()
+lcd.start()
 
 #Start controller
 Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],-500,500)
