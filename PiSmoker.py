@@ -141,10 +141,6 @@ def UpdateParameters(NewParameters,Parameters,Temps)
 
 	return Parameters
 	
-
-	
-	
-	
 def GetAverageSince(Temps,startTime):
 	n = 0
 	sum = [0]*len(Temps[0])
