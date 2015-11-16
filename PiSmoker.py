@@ -24,7 +24,6 @@ ReadParametersInterval =30
 AugerOffMax = 90
 IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
-TempRecord  = 300 #Only keep temperature record for this long
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16}
 Parameters = {'mode': 'Off', 'target':225, 'P': .01, 'I': 0, 'D': 3.0, 'AugerOnTime': 15, 'AugerOffTime': 65}
 
@@ -51,6 +50,7 @@ lcd.start()
 Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],-500,500)
 Control.setTarget(Parameters['target'])
 
+<<<<<<< HEAD
 def RecordTemps(Temps):
 	if len(Temps) == 0 or time.time() - Temps[-1][0] > TempInterval:
 		Ts = [CurrentTime]
@@ -70,6 +70,41 @@ def RecordTemps(Temps):
 	return Temps
 	
 			
+=======
+	#Default parameters
+	Parameters = WriteParameters(Parameters)
+
+	#Setup variables
+	Temps = [] #List, [time, T[0], T[1]...]
+	ResetFirebase(Parameters)
+
+	#Set mode
+	SetMode(Parameters, Temps)
+	LastParametersRead = time.time()
+	
+	###############
+	#Main Loop    #
+	###############
+	while 1:
+		CurrentTime = time.time()
+		
+		#Record temperatures
+		if len(Temps) == 0 or CurrentTime - Temps[-1][0] > TempInterval:
+			Ts = [CurrentTime]
+			for t in T:
+				Ts.append(t.read())
+			Temps.append(Ts)
+			PostTemps(Ts)
+			
+		#Check for new parameters
+		Parameters = ReadParameters(Parameters, Temps)
+
+		#Do mode
+		Parameters = DoMode(Parameters,Temps)
+				
+		time.sleep(TempInterval*0.9)
+
+>>>>>>> d295bc9f7706900928eb8dee44b5f84f9f060b6f
 def PostTemps(Ts):
 	try:
 		r = firebase.post_async('/Temps', {'time': Ts[0]*1000, 'T1': Ts[1], 'T2':Ts[2]} , params={'print': 'silent'}, callback=PostCallback)
