@@ -44,41 +44,7 @@ G = Traeger.Traeger(Relays)
 #Start controller
 Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],-500,500)
 Control.setTarget(Parameters['target'])
-	
 
-def Main(Parameters):
-	##############
-	#Setup       #
-	##############
-
-	#Default parameters
-	Parameters = WriteParameters(Parameters)
-
-	#Setup variables
-	Temps = [] #List, [time, T[0], T[1]...]
-	ResetFirebase(Parameters)
-
-	#Set mode
-	SetMode(Parameters, Temps)
-	LastParametersRead = time.time()
-	
-	###############
-	#Main Loop    #
-	###############
-	while 1:
-		CurrentTime = time.time()
-		
-		#Record temperatures
-		Temps = RecordTemps(Temps)
-			
-		#Check for new parameters
-		Parameters = ReadParameters(Parameters, Temps)
-
-		#Do mode
-		Parameters = DoMode(Parameters,Temps)
-				
-		time.sleep(TempInterval*0.9)
-		
 def RecordTemps(Temps):
 	if len(Temps) == 0 or time.time() - Temps[-1][0] > TempInterval:
 		Ts = [CurrentTime]
@@ -261,4 +227,34 @@ def DoControl(Parameters, Temps):
 		
 	return Parameters
 
-Main(Parameters)
+##############
+#Setup       #
+##############
+
+#Default parameters
+Parameters = WriteParameters(Parameters)
+
+#Setup variables
+Temps = [] #List, [time, T[0], T[1]...]
+ResetFirebase(Parameters)
+
+#Set mode
+SetMode(Parameters, Temps)
+LastParametersRead = time.time()
+
+###############
+#Main Loop    #
+###############
+while 1:
+	CurrentTime = time.time()
+	
+	#Record temperatures
+	Temps = RecordTemps(Temps)
+		
+	#Check for new parameters
+	Parameters = ReadParameters(Parameters, Temps)
+
+	#Do mode
+	Parameters = DoMode(Parameters,Temps)
+			
+	time.sleep(TempInterval*0.9)
