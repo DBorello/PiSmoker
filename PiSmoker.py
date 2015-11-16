@@ -106,7 +106,7 @@ def WriteParameters(Parameters):
 def ReadParameters(Parameters, Temps):
 	'''Read parameters file written by web server and LCD'''
 	#Read from queue
-	if not qR.empty():
+	while not qR.empty():
 		NewParameters = qR.get()
 
 	else:

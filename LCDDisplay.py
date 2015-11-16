@@ -21,9 +21,9 @@ class LCDDisplay(threading.Thread):
 	
 	def run(self):
 		while True:
-			if not self.qP.empty():
+			while not self.qP.empty():
 				self.Parameters = self.qP.get()
-			if not self.qT.empty():
+			while not self.qT.empty():
 				self.Temps = self.qT.get()
 				
 			self.GetButtons()

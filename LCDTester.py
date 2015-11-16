@@ -19,7 +19,7 @@ i = 1
 while True:
 	qT.put([[i,i,i],[i,i,i]])
 
-	if not qR.empty():
+	while not qR.empty():
 		NewParameters = qR.get()
 		for k in NewParameters:
 			Parameters[k] = NewParameters[k]
