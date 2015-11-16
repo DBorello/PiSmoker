@@ -42,7 +42,12 @@ os.symlink(os.path.join(OutputDir,BaseName+'Temperatures.json'),os.path.join(Out
 G = Traeger.Traeger(Relays)
 
 #Initialize LCD
-lcd = LCDDisplay.LCDDisplay()
+qP = Queue.Queue() #Queue for Parameters
+qT = Queue.Queue() #Queue for Temps
+qR = Queue.Queue() #Return for Parameters
+qP.put(Parameters)
+qT.put([[1,1,1]])
+lcd = LCDDisplay.LCDDisplay(qP,qT,qR)
 lcd.setDaemon(True)
 lcd.start()
 
@@ -86,6 +91,7 @@ def ResetFirebase(Parameters):
 def WriteParameters(Parameters):
 	'''Write parameters to file'''
 	Parameters['LastWritten'] = time.time()
+	qP.put(Parameters)
 	
 	for r in Relays:
 		Parameters[r] = G.GetState(r)
@@ -98,12 +104,18 @@ def WriteParameters(Parameters):
 	return Parameters
 	
 def ReadParameters(Parameters, Temps):
-	'''Read parameters file written by web server'''
-	try:
-		NewParameters = firebase.get('/Parameters',None )
-	except:
-		logger.info('Error reading parameters to Firebase')
-		return Parameters
+	'''Read parameters file written by web server and LCD'''
+	#Read from queue
+	if not qR.empty():
+		NewParameters = qR.get()
+
+	else:
+		#Read from webserver
+		try:
+			NewParameters = firebase.get('/Parameters',None )
+		except:
+			logger.info('Error reading parameters to Firebase')
+			return Parameters
 		
 	Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 	return Parameters
