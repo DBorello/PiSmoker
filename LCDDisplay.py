@@ -15,9 +15,9 @@ class LCDDisplay(threading.Thread):
 	
 	def run(self):
 		while True:
-			self.UpdateDisplay()
 			self.GetButtons()
-			time.sleep(0.1)
+			self.UpdateDisplay()
+			
 			
 	def UpdateDisplay(self):
 		text = '%i/%i/%i\n' % (Parameters['target'],Temps[1],Temps[2])
