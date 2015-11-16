@@ -105,6 +105,10 @@ def ReadParameters(Parameters, Temps):
 		logger.info('Error reading parameters to Firebase')
 		return Parameters
 		
+	Parameters = UpdateParameters(NewParameters,Parameters,Temps)
+	return Parameters
+	
+def UpdateParameters(NewParameters,Parameters,Temps)
 	#Loop through each key, see what changed
 	for k in NewParameters.keys():
 		if k == 'target':
