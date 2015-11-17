@@ -90,12 +90,13 @@ def ResetFirebase(Parameters):
 	
 def WriteParameters(Parameters):
 	'''Write parameters to file'''
-	Parameters['LastWritten'] = time.time()
-	qP.put(Parameters)
-	
+
 	for r in Relays:
 		Parameters[r] = G.GetState(r)
 
+	Parameters['LastWritten'] = time.time()
+	qP.put(Parameters)
+			
 	try:
 		r = firebase.patch_async('/Parameters', Parameters, params={'print': 'silent'}, callback=PostCallback)
 	except:
@@ -128,16 +129,19 @@ def UpdateParameters(NewParameters,Parameters,Temps)
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
 				Control.setTarget(float(NewParameters[k]))
 				Parameters[k] = float(NewParameters[k])
+				Parameters = WriteParameters(Parameters)
 		elif k == 'P' or k == 'I' or k == 'D':
 			if float(Parameters[k]) != float(NewParameters[k]):
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
 				Parameters[k] = float(NewParameters[k])
 				Control.setGains(Parameters['P'],Parameters['I'],Parameters['D'])
+				Parameters = WriteParameters(Parameters)
 		elif k == 'mode':
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
 				Parameters[k] = NewParameters[k]
 				Parameters = SetMode(Parameters, Temps)
+				Parameters = WriteParameters(Parameters)
 
 	return Parameters
 	
