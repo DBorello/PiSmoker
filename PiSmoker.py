@@ -24,14 +24,15 @@ firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None
 TempInterval = 3 #Frequency to record temperatures
 TempRecord = 60 #Period to record temperatures in memory
 ParametersInterval = 1#Frequency to write parameters
-ControlInterval = 20#Frequency to update control loop
+PIDCycleTime = 20#Frequency to update control loop
 ReadParametersInterval =3  #Frequency to poll web for new parameters
-AugerOffMax = 90
+u_min = 0.15 #Maintenance level
+u_max = 1.0 #
 IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
-Parameters = {'mode': 'Off', 'target':225, 'P': .01, 'I': 0, 'D': 3.0, 'AugerOnTime': 15, 'AugerOffTime': 65}
+Parameters = {'mode': 'Off', 'target':225, 'P': 46, 'I': 120, 'D': 40, 'CycleTime': 20, 'u': 0.15}
 
 #Initialize RTD Probes
 T = []
@@ -185,15 +186,15 @@ def SetMode(Parameters, Temps):
 		G.SetState('fan',True)
 		G.SetState('auger',True)
 		CheckIgniter(Temps)
-		Parameters['AugerOnTime'] = 15 #15
-		Parameters['AugerOffTime'] = 55 #65
+		Parameters['CycleTime'] = 80
+		Parameters['u'] = 15.0/(15.0+65.0) #P2
 		
 	elif Parameters['mode'] == 'Hold':
 		G.SetState('fan',True)
 		G.SetState('auger',True)
 		CheckIgniter(Temps)
-		Parameters['AugerOnTime'] = 20
-		Parameters['AugerOffTime'] = min(max((436-Parameters['target'])/15.5,0),AugerOffMax) # T = -15.5(OffTime) + 436 
+		Parameters['CycleTime'] = PIDCycleTime
+		Parameters['u'] = u_min #Set to maintenance level
 		
 	WriteParameters(Parameters)	
 	return Parameters	
@@ -220,14 +221,14 @@ def DoMode(Parameters,Temps):
 
 def DoAugerControl(Parameters,Temps):
 
-	#Auger currently on AND TimeSinceToggle > AugerOnTime
-	if G.GetState('auger') and (time.time() - G.ToggleTime['auger']) > Parameters['AugerOnTime']:
+	#Auger currently on AND TimeSinceToggle > Auger On Time
+	if G.GetState('auger') and (time.time() - G.ToggleTime['auger']) > Parameters['CycleTime']*Parameters['u']:
 		G.SetState('auger',False)
 		CheckIgniter(Temps)
 		WriteParameters(Parameters)
 		
-	#Auger currently off AND TimeSinceToggle > AugerOffTime
-	if (not G.GetState('auger')) and (time.time() - G.ToggleTime['auger']) > Parameters['AugerOffTime']:
+	#Auger currently off AND TimeSinceToggle > Auger Off Time
+	if (not G.GetState('auger')) and (time.time() - G.ToggleTime['auger']) > Parameters['CycleTime']*(1-Parameters['u']):
 		G.SetState('auger',True)
 		CheckIgniter(Temps)
 		WriteParameters(Parameters)
@@ -242,16 +243,15 @@ def CheckIgniter(Temps):
 	
 	
 def DoControl(Parameters, Temps):
-	if (time.time() - Control.LastUpdate) > ControlInterval:
+	if (time.time() - Control.LastUpdate) > Parameters['CycleTime']:
 
 		Avg = GetAverageSince(Temps,Control.LastUpdate)
 		du = Control.update(Avg[1]) #Grill probe is [0] in T, [1] in Temps
-		Parameters['AugerOffTime'] += du
-		Parameters['AugerOffTime'] = max(min(Parameters['AugerOffTime'],AugerOffMax),0)
-		logger.info('AugerOffTime %f',Parameters['AugerOffTime'])
+		Parameters['u'] += du
+		logger.info('u %f',Parameters['u'])
 		
 		#Post control state
-		D = {'time': time.time()*1000, 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.PID, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
+		D = {'time': time.time()*1000, 'u': Parameters['u'], 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.PID, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
 		try:			
 			r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
 		except:
