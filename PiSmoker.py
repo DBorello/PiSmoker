@@ -273,7 +273,7 @@ while 1:
 	#Check for new parameters
 	Parameters = ReadParameters(Parameters, Temps)
 
-q	#Do mode
+	#Do mode
 	Parameters = DoMode(Parameters,Temps)
 			
 	time.sleep(0.1)
