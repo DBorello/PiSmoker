@@ -246,8 +246,7 @@ def DoControl(Parameters, Temps):
 	if (time.time() - Control.LastUpdate) > Parameters['CycleTime']:
 
 		Avg = GetAverageSince(Temps,Control.LastUpdate)
-		du = Control.update(Avg[1]) #Grill probe is [0] in T, [1] in Temps
-		Parameters['u'] += du
+		Parameters['u'] = Control.update(Avg[1]) #Grill probe is [0] in T, [1] in Temps
 		logger.info('u %f',Parameters['u'])
 		
 		#Post control state
