@@ -1,4 +1,4 @@
-import time, json, os, datetime, logging, logging.config
+import time, json, os, datetime, logging, logging.config, Queue
 import numpy as np
 import RPi.GPIO as GPIO
 import MAX31865

@@ -1,6 +1,6 @@
 import threading, time
-#import Adafruit_CharLCD as LCD
-import FakeLCD as LCD
+import Adafruit_CharLCD as LCD
+#import FakeLCD as LCD
 
 buttons = ( (LCD.SELECT, 'Mode'),
             (LCD.LEFT,   'Left'  ),
