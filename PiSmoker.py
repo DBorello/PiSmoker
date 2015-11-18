@@ -106,16 +106,17 @@ def ReadParameters(Parameters, Temps):
 	#Read from queue
 	while not qR.empty():
 		NewParameters = qR.get()
-
-	else:
-		#Read from webserver
-		try:
-			NewParameters = firebase.get('/Parameters',None )
-		except:
-			logger.info('Error reading parameters to Firebase')
-			return Parameters
+		logger.info('got new parameters %s',NewParameters)
+		Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 		
-	Parameters = UpdateParameters(NewParameters,Parameters,Temps)
+	#Read from webserver
+	try:
+		NewParameters = firebase.get('/Parameters',None )
+		Parameters = UpdateParameters(NewParameters,Parameters,Temps)
+	except:
+		logger.info('Error reading parameters to Firebase')
+		return Parameters
+		
 	return Parameters
 	
 def UpdateParameters(NewParameters,Parameters,Temps):
