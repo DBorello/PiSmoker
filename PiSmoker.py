@@ -121,7 +121,7 @@ def ReadParameters(Parameters, Temps):
 	Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 	return Parameters
 	
-def UpdateParameters(NewParameters,Parameters,Temps)
+def UpdateParameters(NewParameters,Parameters,Temps):
 	#Loop through each key, see what changed
 	for k in NewParameters.keys():
 		if k == 'target':
