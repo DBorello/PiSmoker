@@ -26,19 +26,25 @@ class PID:
 		self.setTarget(0.0)
 
 	def update(self, Current):
+		#P
 		error = Current - self.setPoint
 
+		#I
 		dT = time.time() - self.LastUpdate
 		self.Inter += error*dT
-		self.Inter = min(max(self.Inter, self.Inter_min), self.Inter_max)
+		self.Inter = max(self.Inter, self.Inter_min)
+		self.Inter = min(self.Inter, self.Inter_max)
 
+		#D
 		self.Derv = (error - self.error)/dT
 
+		#PID
 		self.P = self.Kp * error
 		self.I = self.Ki * self.Inter
 		self.D = self.Kd * self.Derv
 		self.PID = self.P + self.I + self.D
 
+		#Update for next cycle
 		self.error = error
 		self.LastUpdate = time.time()
 
