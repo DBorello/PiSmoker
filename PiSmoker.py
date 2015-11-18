@@ -40,7 +40,7 @@ qP = Queue.Queue() #Queue for Parameters
 qT = Queue.Queue() #Queue for Temps
 qR = Queue.Queue() #Return for Parameters
 qP.put(Parameters)
-qT.put([1,1,1])
+qT.put([0,0,0])
 lcd = LCDDisplay.LCDDisplay(qP,qT,qR)
 lcd.setDaemon(True)
 lcd.start()
@@ -106,7 +106,6 @@ def ReadParameters(Parameters, Temps):
 	#Read from queue
 	while not qR.empty():
 		NewParameters = qR.get()
-		logger.info('got new parameters %s',NewParameters)
 		Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 		
 	#Read from webserver

@@ -28,7 +28,7 @@ class LCDDisplay(threading.Thread):
 				self.Ts = self.qT.get()
 	
 			self.UpdateDisplay()
-			time.sleep(0.05)
+			time.sleep(0.01)
 			
 	def UpdateDisplay(self):
 		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
