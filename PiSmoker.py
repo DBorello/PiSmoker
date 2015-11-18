@@ -22,7 +22,8 @@ ReadParametersInterval =30
 AugerOffMax = 90
 IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
-Relays = {'auger': 22, 'fan': 18, 'igniter': 16}
+Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
+Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
 Parameters = {'mode': 'Off', 'target':225, 'P': .01, 'I': 0, 'D': 3.0, 'AugerOnTime': 15, 'AugerOffTime': 65}
 
 #Initialize RTD Probes

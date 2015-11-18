@@ -13,7 +13,7 @@ class Traeger:
 		
 	def Initialize(self):
 		GPIO.setwarnings(False)
-		GPIO.setmode(GPIO.BOARD)
+		GPIO.setmode(GPIO.BCM)
 		for k in self.Relays.keys():
 			GPIO.setup(self.Relays[k],GPIO.OUT)
 			self.SetState(k,0)
