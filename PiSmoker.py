@@ -45,11 +45,10 @@ G = Traeger.Traeger(Relays)
 #Initialize LCD
 qP = Queue.Queue() #Queue for Parameters
 qT = Queue.Queue() #Queue for Temps
-qC = Queue.Queue() #Queue for Controls
 qR = Queue.Queue() #Return for Parameters
 qP.put(Parameters)
 qT.put([0,0,0])
-lcd = LCDDisplay.LCDDisplay(qP, qT, qC, qR)
+lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
 lcd.setDaemon(True)
 lcd.start()
 

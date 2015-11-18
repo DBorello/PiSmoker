@@ -11,15 +11,15 @@ buttons = ( (LCD.SELECT, 'Mode'),
 Modes = ('Off','Shutdown','Smoke','Hold')
 
 class LCDDisplay(threading.Thread):
-	def __init__(self, qP, qT, qC, qR):
+	def __init__(self, qP, qT, qR):
 		threading.Thread.__init__(self)
 		self.lcd = LCD.Adafruit_CharLCDPlate()
 		
 		self.qP = qP
 		self.qT = qT
 		self.qR = qR
-		self.qC = qC
-	
+
+
 	def run(self):
 		while True:
 			self.GetButtons()
@@ -27,15 +27,15 @@ class LCDDisplay(threading.Thread):
 				self.Parameters = self.qP.get()
 			while not self.qT.empty():
 				self.Ts = self.qT.get()
-	
+
 			self.UpdateDisplay()
 			time.sleep(0.01)
 			
 	def UpdateDisplay(self):
-		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
+		text = 'T%i G%i M%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
 
-		if self.Parameters['mode'] == 'Hold':
-			text += '%s %3.2f' % (self.Parameters['mode'].ljust(10),self.Parameters['u'])
+		if self.Parameters['mode'] == 'Hold' or self.Parameters['mode'] == 'Smoke':
+			text += '%s %3.2f   %s' % (self.Parameters['mode'].ljust(5),self.Parameters['u'],self.GetCurrentState())
 		else:
 			text += '%s' % (self.Parameters['mode'].ljust(16))
 
@@ -50,7 +50,6 @@ class LCDDisplay(threading.Thread):
 					if NewMode == len(Modes):
 						NewMode = 0
 					NewParameters = {'mode': Modes[NewMode]}
-					print NewParameters
 					self.qR.put(NewParameters)
 				elif button[1] == 'Up':
 					NewParameters = {'target': self.Parameters['target'] + 5}
@@ -63,3 +62,13 @@ class LCDDisplay(threading.Thread):
 		for i in range(len(Modes)):
 			if self.Parameters['mode'] == Modes[i]:
 				return i
+
+	def GetCurrentState(self):
+		State = ''
+		if self.Parameters['fan']:
+			State += 'F'
+		if self.Parameters['igniter']:
+			State += 'I'
+		if self.Parameters['auger']:
+			State += 'A'
+		return State
