@@ -57,13 +57,13 @@ Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],500)
 Control.setTarget(Parameters['target'])
 
 
-def RecordTemps(Temps):
+def RecordTemps(Parameters, Temps):
 	if len(Temps) == 0 or time.time() - Temps[-1][0] > TempInterval:
 		Ts = [time.time()]
 		for t in T:
 			Ts.append(t.read())
 		Temps.append(Ts)
-		PostTemps(Ts)
+		PostTemps(Parameters, Ts)
 		
 		#Clean up old temperatures
 		NewTemps = []
@@ -78,9 +78,9 @@ def RecordTemps(Temps):
 				
 	return Temps
 
-def PostTemps(Ts):
+def PostTemps(Parameters, Ts):
 	try:
-		r = firebase.post_async('/Temps', {'time': Ts[0]*1000, 'T1': Ts[1], 'T2':Ts[2]} , params={'print': 'silent'}, callback=PostCallback)
+		r = firebase.post_async('/Temps', {'time': Ts[0]*1000, 'TT': Parameters['target'], 'T1': Ts[1], 'T2':Ts[2]} , params={'print': 'silent'}, callback=PostCallback)
 	except:
 		logger.info('Error writing Temps to Firebase')
 
@@ -281,7 +281,7 @@ Parameters['LastReadWeb'] = time.time()
 ###############
 while 1:
 	#Record temperatures
-	Temps = RecordTemps(Temps)
+	Temps = RecordTemps(Parameters, Temps)
 		
 	#Check for new parameters
 	Parameters = ReadParameters(Parameters, Temps)
