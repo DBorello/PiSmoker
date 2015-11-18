@@ -52,7 +52,7 @@ Control.setTarget(Parameters['target'])
 
 def RecordTemps(Temps):
 	if len(Temps) == 0 or time.time() - Temps[-1][0] > TempInterval:
-		Ts = [CurrentTime]
+		Ts = [time.time()]
 		for t in T:
 			Ts.append(t.read())
 		Temps.append(Ts)
