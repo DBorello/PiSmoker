@@ -14,8 +14,6 @@ logger = logging.getLogger('PiSmoker')
 firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None)
 
 #Parameters
-OutputDir = '/home/pi/www/output'
-ParametersPath = '/home/pi/www/Parameters.json'
 TempInterval = 3 #Frequency to record temperatures
 ParametersInterval = 1#Frequency to write parameters
 ControlInterval = 60#Frequency to update control loop
@@ -30,12 +28,6 @@ Parameters = {'mode': 'Off', 'target':225, 'P': .01, 'I': 0, 'D': 3.0, 'AugerOnT
 T = []
 T.append(MAX31865.MAX31865(1,1000,4000)) #Grill
 T.append(MAX31865.MAX31865(0,100,400)) #Meat
-
-
-#Create symlinks
-BaseName = datetime.datetime.now().strftime('%Y%m%d-%H%M%S_')
-os.remove(os.path.join(OutputDir,'Temperatures.json'))
-os.symlink(os.path.join(OutputDir,BaseName+'Temperatures.json'),os.path.join(OutputDir,'Temperatures.json'))
 
 #Initialize Traeger Object
 G = Traeger.Traeger(Relays)
