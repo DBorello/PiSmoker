@@ -267,15 +267,13 @@ Parameters['LastReadWeb'] = time.time()
 #Main Loop    #
 ###############
 while 1:
-	CurrentTime = time.time()
-	
 	#Record temperatures
 	Temps = RecordTemps(Temps)
 		
 	#Check for new parameters
 	Parameters = ReadParameters(Parameters, Temps)
 
-	#Do mode
+q	#Do mode
 	Parameters = DoMode(Parameters,Temps)
 			
 	time.sleep(0.1)
