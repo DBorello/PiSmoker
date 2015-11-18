@@ -35,9 +35,9 @@ class LCDDisplay(threading.Thread):
 		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
 
 		if self.Parameters['mode'] == 'Hold':
-			text += 'Mode: %s' % (self.Parameters['mode'].ljust(10))
+			text += '%s %3.2f' % (self.Parameters['mode'].ljust(10),self.Parameters['u'])
 		else:
-			text += 'Mode: %s' % (self.Parameters['mode'].ljust(10))
+			text += '%s' % (self.Parameters['mode'].ljust(16))
 
 		self.lcd.home()
 		self.lcd.message(text)
