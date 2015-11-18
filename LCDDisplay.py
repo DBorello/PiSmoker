@@ -32,9 +32,9 @@ class LCDDisplay(threading.Thread):
 			
 	def UpdateDisplay(self):
 		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
-		text += 'Mode: %s' % (self.Parameters['mode'])
+		text += 'Mode: %s' % (self.Parameters['mode'].ljust(10))
 
-		self.lcd.clear()
+		self.lcd.home()
 		self.lcd.message(text)
 		
 	def GetButtons(self):

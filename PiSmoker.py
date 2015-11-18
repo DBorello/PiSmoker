@@ -19,7 +19,7 @@ TempInterval = 3 #Frequency to record temperatures
 TempRecord = 60 #Period to record temperatures in memory
 ParametersInterval = 1#Frequency to write parameters
 ControlInterval = 60#Frequency to update control loop
-ReadParametersInterval =30
+ReadParametersInterval =3  #Frequency to poll web for new parameters
 AugerOffMax = 90
 IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
@@ -110,12 +110,14 @@ def ReadParameters(Parameters, Temps):
 		Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 		
 	#Read from webserver
-	try:
-		NewParameters = firebase.get('/Parameters',None )
-		Parameters = UpdateParameters(NewParameters,Parameters,Temps)
-	except:
-		logger.info('Error reading parameters to Firebase')
-		return Parameters
+	if time.time() - Parameters['LastReadWeb'] > ReadParametersInterval:
+		Parameters['LastReadWeb'] = time.time()
+		try:
+			NewParameters = firebase.get('/Parameters',None )
+			Parameters = UpdateParameters(NewParameters,Parameters,Temps)
+		except:
+			logger.info('Error reading parameters to Firebase')
+			return Parameters
 		
 	return Parameters
 	
@@ -259,7 +261,7 @@ ResetFirebase(Parameters)
 
 #Set mode
 SetMode(Parameters, Temps)
-LastParametersRead = time.time()
+Parameters['LastReadWeb'] = time.time()
 
 ###############
 #Main Loop    #
@@ -276,4 +278,4 @@ while 1:
 	#Do mode
 	Parameters = DoMode(Parameters,Temps)
 			
-	time.sleep(TempInterval*0.9)
+	time.sleep(0.1)
