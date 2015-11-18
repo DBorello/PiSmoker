@@ -1,4 +1,10 @@
-import time, json, os, datetime, logging, logging.config, Queue
+import time
+import json
+import os
+import datetime
+import logging
+import logging.config
+import Queue
 import numpy as np
 import RPi.GPIO as GPIO
 import MAX31865
@@ -77,14 +83,16 @@ def PostTemps(Ts):
 	except:
 		logger.info('Error writing Temps to Firebase')
 
+
 def PostCallback(data=None):
-	None
+	pass
 		
 def ResetFirebase(Parameters):
 	r = firebase.put('/','Parameters',Parameters, {'print':'silent'})
 	r = firebase.delete('/','Temps')
 	r = firebase.delete('/','Controls')
-	
+
+
 def WriteParameters(Parameters):
 	'''Write parameters to file'''
 
@@ -100,7 +108,8 @@ def WriteParameters(Parameters):
 		logger.info('Error writing parameters to Firebase')
 		
 	return Parameters
-	
+
+
 def ReadParameters(Parameters, Temps):
 	'''Read parameters file written by web server and LCD'''
 	#Read from queue
@@ -119,7 +128,8 @@ def ReadParameters(Parameters, Temps):
 			return Parameters
 		
 	return Parameters
-	
+
+
 def UpdateParameters(NewParameters,Parameters,Temps):
 	#Loop through each key, see what changed
 	for k in NewParameters.keys():
@@ -143,7 +153,8 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 				Parameters = WriteParameters(Parameters)
 
 	return Parameters
-	
+
+
 def GetAverageSince(Temps,startTime):
 	n = 0
 	sum = [0]*len(Temps[0])
@@ -186,10 +197,11 @@ def SetMode(Parameters, Temps):
 		
 	WriteParameters(Parameters)	
 	return Parameters	
-		
+
+
 def DoMode(Parameters,Temps):
 	if Parameters['mode'] == 'Off':
-		None
+		pass
 	
 	elif Parameters['mode'] == 'Shutdown':
 		if (time.time() - G.ToggleTime['fan']) > ShutdownTime:
@@ -205,7 +217,7 @@ def DoMode(Parameters,Temps):
 
 	return Parameters
 		
-	
+
 def DoAugerControl(Parameters,Temps):
 
 	#Auger currently on AND TimeSinceToggle > AugerOnTime
@@ -219,7 +231,8 @@ def DoAugerControl(Parameters,Temps):
 		G.SetState('auger',True)
 		CheckIgniter(Temps)
 		WriteParameters(Parameters)
-		
+
+
 def CheckIgniter(Temps):
 		#Check if igniter needed
 		if Temps[-1][1] < IgniterTemperature:
