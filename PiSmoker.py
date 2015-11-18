@@ -16,6 +16,7 @@ firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None
 
 #Parameters
 TempInterval = 3 #Frequency to record temperatures
+TempRecord = 60 #Period to record temperatures in memory
 ParametersInterval = 1#Frequency to write parameters
 ControlInterval = 60#Frequency to update control loop
 ReadParametersInterval =30
@@ -39,7 +40,7 @@ qP = Queue.Queue() #Queue for Parameters
 qT = Queue.Queue() #Queue for Temps
 qR = Queue.Queue() #Return for Parameters
 qP.put(Parameters)
-qT.put([[1,1,1]])
+qT.put([1,1,1])
 lcd = LCDDisplay.LCDDisplay(qP,qT,qR)
 lcd.setDaemon(True)
 lcd.start()
@@ -62,6 +63,9 @@ def RecordTemps(Temps):
 		for Ts in Temps:
 			if time.time() - Ts[0] < TempRecord: #Still valid
 				NewTemps.append(Ts)
+				
+		#Push temperatures to LCD
+		qT.put(Ts)
 				
 		return NewTemps
 				

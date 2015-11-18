@@ -25,15 +25,15 @@ class LCDDisplay(threading.Thread):
 			while not self.qP.empty():
 				self.Parameters = self.qP.get()
 			while not self.qT.empty():
-				self.Temps = self.qT.get()
+				self.Ts = self.qT.get()
 	
 			self.UpdateDisplay()
 			time.sleep(0.1)
 			
 	def UpdateDisplay(self):
-		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Temps[-1][1],self.Temps[-1][2])
+		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
 		text += 'Mode: %s' % (self.Parameters['mode'])
-		
+
 		self.lcd.home()
 		self.lcd.message(text)
 		
