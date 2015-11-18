@@ -11,13 +11,14 @@ buttons = ( (LCD.SELECT, 'Mode'),
 Modes = ('Off','Shutdown','Smoke','Hold')
 
 class LCDDisplay(threading.Thread):
-	def __init__(self,qP,qT,qR):
+	def __init__(self, qP, qT, qC, qR):
 		threading.Thread.__init__(self)
 		self.lcd = LCD.Adafruit_CharLCDPlate()
 		
 		self.qP = qP
 		self.qT = qT
 		self.qR = qR
+		self.qC = qC
 	
 	def run(self):
 		while True:
@@ -32,7 +33,11 @@ class LCDDisplay(threading.Thread):
 			
 	def UpdateDisplay(self):
 		text = '%i/%i/%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
-		text += 'Mode: %s' % (self.Parameters['mode'].ljust(10))
+
+		if self.Parameters['mode'] == 'Hold':
+			text += 'Mode: %s' % (self.Parameters['mode'].ljust(10))
+		else:
+			text += 'Mode: %s' % (self.Parameters['mode'].ljust(10))
 
 		self.lcd.home()
 		self.lcd.message(text)
