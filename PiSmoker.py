@@ -9,7 +9,7 @@ import numpy as np
 import RPi.GPIO as GPIO
 import MAX31865
 import Traeger
-import PID
+import PIDv2 as PID
 import LCDDisplay
 from firebase import firebase
 
@@ -53,7 +53,7 @@ lcd.setDaemon(True)
 lcd.start()
 
 #Start controller
-Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],-500,500)
+Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],500)
 Control.setTarget(Parameters['target'])
 
 
