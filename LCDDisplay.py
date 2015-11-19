@@ -4,8 +4,8 @@ import Adafruit_CharLCD as LCD
 
 buttons = ( (LCD.SELECT, 'Mode'),
             (LCD.LEFT,   'Left'  ),
-            (LCD.UP,     'Up'    ),
-            (LCD.DOWN,   'Down'  ),
+            (LCD.UP,     'Down'    ), #Hardware snafu 
+            (LCD.DOWN,   'Up'  ),
             (LCD.RIGHT,  'Right' ))
 			
 Modes = ('Off','Shutdown','Smoke','Hold')
