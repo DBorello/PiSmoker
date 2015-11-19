@@ -13,9 +13,8 @@ logger = logging.getLogger(__name__)
 # Td = Predicts error value at Td in seconds
 
 class PID:
-	def __init__(self,  PB, Ti, Td, Bias):
+	def __init__(self,  PB, Ti, Td):
 		self.CalculateGains(PB,Ti,Td)
-		self.Bias = Bias
 
 		self.P = 0.0
 		self.I = 0.0
@@ -38,7 +37,7 @@ class PID:
 	def update(self, Current):
 		#P
 		error = Current - self.setPoint
-		self.P = -self.Kd*error + self.Bias #P = 1 for PB/2 under setPoint, P = 0 for PB/2 over setPoint
+		self.P = -self.Kd*error + 0.5 #P = 1 for PB/2 under setPoint, P = 0 for PB/2 over setPoint
 
 		#I
 		dT = time.time() - self.LastUpdate
