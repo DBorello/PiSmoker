@@ -6,14 +6,12 @@ import logging.config
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger(__name__)
 
-#PID controller based on proportional band
+#PID controller based on proportional band in standard PID form
+# u = Kp (e(t)+ 1/Ti INT + Td de/dt)
 
 class PID:
-	def __init__(self,  PB, Ki, Kd, I_max):
-		self.PB = PB #Proportional Band (F)
-
-		self.Ki = Ki
-		self.Kd = Kd
+	def __init__(self,  PB, Ti, Td, I_max):
+		self.GetGains(PB,Ti,Td)
 
 		self.P = 0.0
 		self.I = 0.0
@@ -26,10 +24,15 @@ class PID:
 
 		self.setTarget(0.0)
 
+	def GetGains(self,PB,Ti,Td):
+		self.Kp = -1/PB
+		self.Ki = self.Kp/Ti
+		self.Kd = self.Kp*Td
+
 	def update(self, Current):
 		#P
 		error = Current - self.setPoint
-		self.P = -error*1/self.PB + 0.5 #P = 1 for PB/2 under setPoint, P = 0 for PB/2 over setPoint
+		self.P = self.Kd + 0.5 #P = 1 for PB/2 under setPoint, P = 0 for PB/2 over setPoint
 
 		#I
 		dT = time.time() - self.LastUpdate
@@ -51,7 +54,7 @@ class PID:
 		self.error = error
 		self.LastUpdate = time.time()
 
-		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.PB,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.PID)
+		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.Kd,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.PID)
 
 		return self.PID
 
@@ -62,11 +65,9 @@ class PID:
 		self.Derv = 0.0
 		self.LastUpdate = time.time()
 
-	def setGains(self, Kp, Ki, Kd):
-		self.Kp = Kp
-		self.Ki = Ki
-		self.Kd = Kd
-		logger.info('New Gains (%f,%f,%f)', Kp, Ki, Kd)
+	def setGains(self, PB, Ti, Td):
+		self.GetGains(PB,Ti,Kd)
+		logger.info('New Gains (%f,%f,%f)', self.Kp, self.Ki, self.Kd)
 
 	def getK(self):
 		return self.Kp, self.Ki, self.Kd
