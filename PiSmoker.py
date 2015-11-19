@@ -254,6 +254,8 @@ def DoControl(Parameters, Temps):
 
 		Avg = GetAverageSince(Temps,Control.LastUpdate)
 		Parameters['u'] = Control.update(Avg[1]) #Grill probe is [0] in T, [1] in Temps
+		Parameters['u'] = max(Parameters['u'],u_min)
+		Parameters['u'] = min(Parameters['u'],u_max)
 		logger.info('u %f',Parameters['u'])
 		
 		#Post control state
@@ -296,4 +298,4 @@ while 1:
 	#Do mode
 	Parameters = DoMode(Parameters,Temps)
 			
-	time.sleep(0.1)
+	time.sleep(0.05)

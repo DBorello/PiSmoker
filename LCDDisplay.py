@@ -67,8 +67,17 @@ class LCDDisplay(threading.Thread):
 		State = ''
 		if self.Parameters['fan']:
 			State += 'F'
+		else:
+			State += ' '
+		
 		if self.Parameters['igniter']:
 			State += 'I'
+		else:
+			State += ' '
+			
 		if self.Parameters['auger']:
 			State += 'A'
+		else:
+			State += ' '
+			
 		return State
