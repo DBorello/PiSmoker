@@ -14,7 +14,7 @@ import LCDDisplay
 from firebase import firebase
 
 #Start logging
-logging.config.fileConfig('logging.conf')
+logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
 logger = logging.getLogger('PiSmoker')
 
 #Start firebase

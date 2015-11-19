@@ -2,7 +2,7 @@ import spidev
 import time, math, logging, logging.config
 
 #Start logging
-logging.config.fileConfig('logging.conf')
+logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
 logger = logging.getLogger(__name__)
 
 #Datasheet https://datasheets.maximintegrated.com/en/ds/MAX31865.pdf

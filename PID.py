@@ -3,7 +3,7 @@ import logging
 import logging.config
 
 # Start logging
-logging.config.fileConfig('logging.conf')
+logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
 logger = logging.getLogger(__name__)
 
 #PID controller based on proportional band in standard PID form https://en.wikipedia.org/wiki/PID_controller#Ideal_versus_standard_PID_form
