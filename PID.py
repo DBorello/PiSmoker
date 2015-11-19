@@ -25,6 +25,8 @@ class PID:
 		self.Inter = 0.0
 		self.Inter_max = 1/self.Ki
 
+		self.Last = 150
+
 		self.setTarget(0.0)
 
 	def CalculateGains(self,PB,Ti,Td):
@@ -47,7 +49,7 @@ class PID:
 		self.I = self.Ki * self.Inter
 
 		#D
-		self.Derv = (error - self.error)/dT
+		self.Derv = (Current - self.Last)/dT
 		self.D = self.Kd * self.Derv
 
 		#PID
@@ -55,6 +57,7 @@ class PID:
 
 		#Update for next cycle
 		self.error = error
+		self.Last = Current
 		self.LastUpdate = time.time()
 
 		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.Kd,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.PID)
