@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # Td = Predicts error value at Td in seconds
 
 class PID:
-	def __init__(self,  PB, Ti, Td, I_max):
+	def __init__(self,  PB, Ti, Td):
 		self.CalculateGains(PB,Ti,Td)
 
 		self.P = 0.0
@@ -23,7 +23,7 @@ class PID:
 
 		self.Derv = 0.0
 		self.Inter = 0.0
-		self.Inter_max = I_max
+		self.Inter_max = 1/self.Ki
 
 		self.setTarget(0.0)
 

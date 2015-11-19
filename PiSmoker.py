@@ -60,7 +60,7 @@ lcd.setDaemon(True)
 lcd.start()
 
 #Start controller
-Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'],500)
+Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
 Control.setTarget(Parameters['target'])
 
 
