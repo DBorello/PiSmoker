@@ -67,6 +67,7 @@ class PID:
 		self.Inter = 0.0
 		self.Derv = 0.0
 		self.LastUpdate = time.time()
+		logger.info('New Target: %f',setPoint)
 
 	def setGains(self, PB, Ti, Td):
 		self.CalculateGains(PB,Ti,Kd)
