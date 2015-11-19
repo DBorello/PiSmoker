@@ -28,6 +28,7 @@ PIDCycleTime = 20#Frequency to update control loop
 ReadParametersInterval =3  #Frequency to poll web for new parameters
 u_min = 0.15 #Maintenance level
 u_max = 1.0 #
+PIDBias = 0.25 # Maintenance duty cycle to maintain temperature
 IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
@@ -60,7 +61,7 @@ lcd.setDaemon(True)
 lcd.start()
 
 #Start controller
-Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
+Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'],PIDBias)
 Control.setTarget(Parameters['target'])
 
 
