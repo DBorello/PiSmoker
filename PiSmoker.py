@@ -32,7 +32,7 @@ IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
-Parameters = {'mode': 'Off', 'target':225, 'P': 40, 'I': 180, 'D': 45, 'CycleTime': 20, 'u': 0.15}
+Parameters = {'mode': 'Off', 'target':225, 'PB': 40, 'Ti': 180, 'Td': 45, 'CycleTime': 20, 'u': 0.15}
 
 #PID controller based on proportional band in standard PID form https://en.wikipedia.org/wiki/PID_controller#Ideal_versus_standard_PID_form
 # u = Kp (e(t)+ 1/Ti INT + Td de/dt)
@@ -60,7 +60,7 @@ lcd.setDaemon(True)
 lcd.start()
 
 #Start controller
-Control = PID.PID(Parameters['P'],Parameters['I'],Parameters['D'],500)
+Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'],500)
 Control.setTarget(Parameters['target'])
 
 
@@ -151,7 +151,7 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 			if float(Parameters[k]) != float(NewParameters[k]):
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
 				Parameters[k] = float(NewParameters[k])
-				Control.setGains(Parameters['P'],Parameters['I'],Parameters['D'])
+				Control.setGains(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
 				Parameters = WriteParameters(Parameters)
 		elif k == 'mode':
 			if Parameters[k] != NewParameters[k]:

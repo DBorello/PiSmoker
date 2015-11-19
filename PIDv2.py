@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class PID:
 	def __init__(self,  PB, Ti, Td, I_max):
-		self.GetGains(PB,Ti,Td)
+		self.CalculateGains(PB,Ti,Td)
 
 		self.P = 0.0
 		self.I = 0.0
@@ -27,7 +27,7 @@ class PID:
 
 		self.setTarget(0.0)
 
-	def GetGains(self,PB,Ti,Td):
+	def CalculateGains(self,PB,Ti,Td):
 		self.Kp = -1/PB
 		self.Ki = self.Kp/Ti
 		self.Kd = self.Kp*Td
@@ -69,7 +69,7 @@ class PID:
 		self.LastUpdate = time.time()
 
 	def setGains(self, PB, Ti, Td):
-		self.GetGains(PB,Ti,Kd)
+		self.CalculateGains(PB,Ti,Kd)
 		logger.info('New Gains (%f,%f,%f)', self.Kp, self.Ki, self.Kd)
 
 	def getK(self):
