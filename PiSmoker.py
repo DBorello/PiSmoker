@@ -9,7 +9,7 @@ import numpy as np
 import RPi.GPIO as GPIO
 import MAX31865
 import Traeger
-import PIDv2 as PID
+import PID as PID
 import LCDDisplay
 from firebase import firebase
 
@@ -260,8 +260,9 @@ def DoControl(Parameters, Temps):
 		
 		#Post control state
 		D = {'time': time.time()*1000, 'u': Parameters['u'], 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.PID, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
+		r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
 		try:			
-			r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
+			
 		except:
 			logger.info('Error writing Controls to Firebase')
 
