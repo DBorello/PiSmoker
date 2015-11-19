@@ -6,8 +6,11 @@ import logging.config
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger(__name__)
 
-#PID controller based on proportional band in standard PID form
+#PID controller based on proportional band in standard PID form https://en.wikipedia.org/wiki/PID_controller#Ideal_versus_standard_PID_form
 # u = Kp (e(t)+ 1/Ti INT + Td de/dt)
+# PB = Proportional Band
+# Ti = Goal of eliminating in Ti seconds
+# Td = Predicts error value at Td in seconds
 
 class PID:
 	def __init__(self,  PB, Ti, Td, I_max):
