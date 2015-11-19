@@ -19,7 +19,7 @@ class PID:
 		self.P = 0.0
 		self.I = 0.0
 		self.D = 0.0
-		self.PID = 0
+		self.u = 0
 
 		self.Derv = 0.0
 		self.Inter = 0.0
@@ -53,16 +53,16 @@ class PID:
 		self.D = self.Kd * self.Derv
 
 		#PID
-		self.PID = self.P + self.I + self.D
+		self.u = self.P + self.I + self.D
 
 		#Update for next cycle
 		self.error = error
 		self.Last = Current
 		self.LastUpdate = time.time()
 
-		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.Kd,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.PID)
+		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.Kd,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.u)
 
-		return self.PID
+		return self.u
 
 	def	setTarget(self, setPoint):
 		self.setPoint = setPoint
