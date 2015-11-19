@@ -37,7 +37,7 @@ Parameters = {'mode': 'Off', 'target':225, 'P': 40, 'I': 180, 'D': 45, 'CycleTim
 #PID controller based on proportional band in standard PID form https://en.wikipedia.org/wiki/PID_controller#Ideal_versus_standard_PID_form
 # u = Kp (e(t)+ 1/Ti INT + Td de/dt)
 # PB = Proportional Band
-# Ti = Goal of eliminating in Ti seconds
+# Ti = Goal of eliminating in Ti seconds (Make large to disable integration)
 # Td = Predicts error value at Td in seconds
 
 
