@@ -37,7 +37,7 @@ class PID:
 	def update(self, Current):
 		#P
 		error = Current - self.setPoint
-		self.P = -self.Kd*error + 0.5 #P = 1 for PB/2 under setPoint, P = 0 for PB/2 over setPoint
+		self.P = self.Kd*error + 0.5 #P = 1 for PB/2 under setPoint, P = 0 for PB/2 over setPoint
 
 		#I
 		dT = time.time() - self.LastUpdate
