@@ -100,6 +100,14 @@ def ResetFirebase(Parameters):
 	r = firebase.delete('/','Temps')
 	r = firebase.delete('/','Controls')
 
+	#Post control state
+	D = {'time': time.time()*1000, 'u': 0, 'P':0, 'I': 0, 'D': 0, 'PID':0, 'Error':0, 'Derv':0, 'Inter':0}
+
+	try:
+		r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
+	except:
+		logger.info('Error writing Controls to Firebase')
+
 
 def WriteParameters(Parameters):
 	'''Write parameters to file'''
