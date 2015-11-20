@@ -17,8 +17,7 @@ from firebase import firebase
 logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
 logger = logging.getLogger('PiSmoker')
 
-#Start firebase
-firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None)
+
 
 #Parameters
 TempInterval = 3 #Frequency to record temperatures
@@ -34,21 +33,6 @@ Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
 Parameters = {'mode': 'Off', 'target':225, 'PB': 40.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15}
 
-#PID controller based on proportional band in standard PID form https://en.wikipedia.org/wiki/PID_controller#Ideal_versus_standard_PID_form
-# u = Kp (e(t)+ 1/Ti INT + Td de/dt)
-# PB = Proportional Band
-# Ti = Goal of eliminating in Ti seconds (Make large to disable integration)
-# Td = Predicts error value at Td in seconds
-
-
-#Initialize RTD Probes
-T = []
-T.append(MAX31865.MAX31865(1,1000,4000)) #Grill
-T.append(MAX31865.MAX31865(0,100,400)) #Meat
-
-#Initialize Traeger Object
-G = Traeger.Traeger(Relays)
-
 #Initialize LCD
 qP = Queue.Queue() #Queue for Parameters
 qT = Queue.Queue() #Queue for Temps
@@ -59,9 +43,26 @@ lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
 lcd.setDaemon(True)
 lcd.start()
 
+#Initialize RTD Probes
+T = []
+T.append(MAX31865.MAX31865(1,1000,4000)) #Grill
+T.append(MAX31865.MAX31865(0,100,400)) #Meat
+
+#Initialize Traeger Object
+G = Traeger.Traeger(Relays)
+
+#PID controller based on proportional band in standard PID form https://en.wikipedia.org/wiki/PID_controller#Ideal_versus_standard_PID_form
+# u = Kp (e(t)+ 1/Ti INT + Td de/dt)
+# PB = Proportional Band
+# Ti = Goal of eliminating in Ti seconds (Make large to disable integration)
+# Td = Predicts error value at Td in seconds
+
 #Start controller
 Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
 Control.setTarget(Parameters['target'])
+
+#Start firebase
+firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None)
 
 
 def RecordTemps(Parameters, Temps):
