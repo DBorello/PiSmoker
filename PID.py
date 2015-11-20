@@ -33,7 +33,7 @@ class PID:
 		self.Kp = -1/PB
 		self.Ki = self.Kp/Ti
 		self.Kd = self.Kp*Td
-		logging('PB: %f Ti: %f Td: %f --> Kp: %f Ki: %f Kd: %f',PB,Ti,Td,self.Kp,self.Ki,self.Kd)
+		logger.info('PB: %f Ti: %f Td: %f --> Kp: %f Ki: %f Kd: %f',PB,Ti,Td,self.Kp,self.Ki,self.Kd)
 
 
 	def update(self, Current):
