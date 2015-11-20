@@ -39,9 +39,12 @@ class LCDDisplay(threading.Thread):
 		else:
 			text += '%s' % (self.Parameters['mode'].ljust(16))
 
-		self.lcd.home()
-		self.lcd.message(text)
-		
+		try:
+			self.lcd.home()
+			self.lcd.message(text)
+		except:
+			pass
+
 	def GetButtons(self):
 		for button in buttons:
 			if self.lcd.is_pressed(button[0]):
