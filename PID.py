@@ -23,7 +23,7 @@ class PID:
 
 		self.Derv = 0.0
 		self.Inter = 0.0
-		self.Inter_max = 1/self.Ki
+		self.Inter_max = abs(1/self.Ki)
 
 		self.Last = 150
 
