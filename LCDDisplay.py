@@ -1,5 +1,8 @@
-import threading, time
-import Adafruit_CharLCD as LCD
+import threading
+import time
+import logging
+import logging.config
+
 #import FakeLCD as LCD
 
 buttons = ( (LCD.SELECT, 'Mode'),
@@ -10,10 +13,17 @@ buttons = ( (LCD.SELECT, 'Mode'),
 			
 Modes = ('Off','Shutdown','Smoke','Hold')
 
+# Start logging
+logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
+logger = logging.getLogger(__name__)
+
 class LCDDisplay(threading.Thread):
 	def __init__(self, qP, qT, qR):
 		threading.Thread.__init__(self)
-		self.lcd = LCD.Adafruit_CharLCDPlate()
+		try:
+			self.lcd = LCD.Adafruit_CharLCDPlate()
+		except:
+			logger.info('Unable to initialize LCD')
 		
 		self.qP = qP
 		self.qT = qT
@@ -43,7 +53,8 @@ class LCDDisplay(threading.Thread):
 			self.lcd.home()
 			self.lcd.message(text)
 		except:
-			pass
+			logger.info('Unable to update LCD - %s',text)
+
 
 	def GetButtons(self):
 		for button in buttons:
