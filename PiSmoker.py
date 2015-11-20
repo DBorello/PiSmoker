@@ -259,7 +259,7 @@ def DoControl(Parameters, Temps):
 		logger.info('u %f',Parameters['u'])
 		
 		#Post control state
-		D = {'time': time.time()*1000, 'u': Parameters['u'], 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.PID, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
+		D = {'time': time.time()*1000, 'u': Parameters['u'], 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.u, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
 		
 		try:			
 			r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
