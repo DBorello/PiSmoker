@@ -33,6 +33,8 @@ class PID:
 		self.Kp = -1/PB
 		self.Ki = self.Kp/Ti
 		self.Kd = self.Kp*Td
+		logging('PB: %f Ti: %f Td: %f --> Kp: %f Ki: %f Kd: %f',PB,Ti,Td,self.Kp,self.Ki,self.Kd)
+
 
 	def update(self, Current):
 		#P
@@ -60,7 +62,7 @@ class PID:
 		self.Last = Current
 		self.LastUpdate = time.time()
 
-		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.Kd,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.u)
+		logger.info('Target: %d Current: %d Gains: (%f,%f,%f) Errors(%f,%f,%f) Adjustments: (%f,%f,%f) PID: %f' ,self.setPoint, Current,self.Kp,self.Ki,self.Kd,error,self.Inter,self.Derv,self.P,self.I,self.D,self.u)
 
 		return self.u
 
