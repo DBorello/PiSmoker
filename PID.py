@@ -46,7 +46,7 @@ class PID:
 		if self.P > 0 and self.P < 1: #Ensure we are in the PB, otherwise do not calculate I to avoid windup
 			self.Inter += error*dT
 			self.Inter = max(self.Inter, -self.Inter_max)
-			self.Inter = min(self.Inter, -self.Inter_max)
+			self.Inter = min(self.Inter, self.Inter_max)
 
 		self.I = self.Ki * self.Inter
 
