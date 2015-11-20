@@ -260,8 +260,8 @@ def DoControl(Parameters, Temps):
 		
 		#Post control state
 		D = {'time': time.time()*1000, 'u': Parameters['u'], 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.u, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
-		
-		try:			
+
+		try:
 			r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
 		except:
 			logger.info('Error writing Controls to Firebase')
