@@ -233,9 +233,15 @@ def DoMode(Parameters,Temps):
 			Parameters['mode'] = 'Off'
 			Parameters = SetMode(Parameters, Temps)
 		
+	elif Parameters['mode'] == 'Startup':
+		DoAugerControl(Parameters,Temps)
+		if Temps[-1][1] > 200:
+			Parameters['mode'] = 'Hold'
+			Parameters = SetMode(Parameters, Temps)
+
 	elif Parameters['mode'] == 'Smoke':
 		DoAugerControl(Parameters,Temps)
-		
+
 	elif Parameters['mode'] == 'Hold':
 		Parameters = DoControl(Parameters,Temps)
 		DoAugerControl(Parameters,Temps)
