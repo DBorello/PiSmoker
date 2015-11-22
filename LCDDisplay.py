@@ -12,7 +12,7 @@ buttons = ( (LCD.SELECT, 'Mode'),
             (LCD.DOWN,   'Up'  ),
             (LCD.RIGHT,  'Right' ))
 			
-Modes = ('Off','Shutdown','Startup','Smoke','Hold')
+Modes = ('Off','Startup','Smoke','Hold','Shutdown')
 
 # Start logging
 logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
