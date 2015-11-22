@@ -12,7 +12,7 @@ buttons = ( (LCD.SELECT, 'Mode'),
             (LCD.DOWN,   'Up'  ),
             (LCD.RIGHT,  'Right' ))
 			
-Modes = ('Off','Shutdown','Smoke','Hold')
+Modes = ('Off','Shutdown','Startup','Smoke','Hold')
 
 # Start logging
 logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
@@ -45,7 +45,7 @@ class LCDDisplay(threading.Thread):
 	def UpdateDisplay(self):
 		text = 'T%i G%i M%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
 
-		if self.Parameters['mode'] == 'Hold' or self.Parameters['mode'] == 'Smoke':
+		if self.Parameters['mode'] == 'Hold' or self.Parameters['mode'] == 'Smoke' or self.Parameters['mode'] == 'Startup':
 			text += '%s %3.2f   %s' % (self.Parameters['mode'].ljust(5),self.Parameters['u'],self.GetCurrentState())
 		else:
 			text += '%s' % (self.Parameters['mode'].ljust(16))
