@@ -198,18 +198,25 @@ def SetMode(Parameters, Temps):
 	elif Parameters['mode'] == 'Shutdown':
 		G.Initialize()
 		G.SetState('fan',True)
-		
+
+	elif Parameters['mode'] == 'Startup':
+		G.SetState('fan',True)
+		G.SetState('auger',True)
+		CheckIgniter(Parameters, Temps)
+		Parameters['CycleTime'] = 80
+		Parameters['u'] = 15.0/(15.0+65.0) #P2
+
 	elif Parameters['mode'] == 'Smoke':
 		G.SetState('fan',True)
 		G.SetState('auger',True)
-		CheckIgniter(Temps)
+		CheckIgniter(Parameters, Temps)
 		Parameters['CycleTime'] = 80
 		Parameters['u'] = 15.0/(15.0+65.0) #P2
 		
 	elif Parameters['mode'] == 'Hold':
 		G.SetState('fan',True)
 		G.SetState('auger',True)
-		CheckIgniter(Temps)
+		CheckIgniter(Parameters, Temps)
 		Parameters['CycleTime'] = PIDCycleTime
 		Parameters['u'] = u_min #Set to maintenance level
 		
