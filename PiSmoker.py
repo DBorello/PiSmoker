@@ -31,7 +31,8 @@ IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
-Parameters = {'mode': 'Off', 'target':225, 'PB': 40.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15}
+Parameters = {'mode': 'Off', 'target':225, 'PB': 50.0, 'Ti': 180.0, 'Td': 60.0, 'CycleTime': 20, 'u': 0.15}
+ #60,180,45 held +- 5F
 
 #Initialize LCD
 qP = Queue.Queue() #Queue for Parameters
