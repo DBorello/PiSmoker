@@ -2,6 +2,7 @@ import threading
 import time
 import logging
 import logging.config
+import Adafruit_CharLCD as LCD
 
 #import FakeLCD as LCD
 
