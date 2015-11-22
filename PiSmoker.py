@@ -139,6 +139,7 @@ def ReadParameters(Parameters, Temps):
 		Parameters['LastReadWeb'] = time.time()
 		try:
 			NewParameters = firebase.get('/Parameters',None )
+			#logger.info('New parameters from firebase: %s',NewParameters)
 			Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 		except:
 			logger.info('Error reading parameters to Firebase')
@@ -156,7 +157,7 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 				Control.setTarget(float(NewParameters[k]))
 				Parameters[k] = float(NewParameters[k])
 				Parameters = WriteParameters(Parameters)
-		elif k == 'P' or k == 'I' or k == 'D':
+		elif k == 'PB' or k == 'Ti' or k == 'Td':
 			if float(Parameters[k]) != float(NewParameters[k]):
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
 				Parameters[k] = float(NewParameters[k])
