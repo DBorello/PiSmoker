@@ -69,13 +69,13 @@ class LCDDisplay(threading.Thread):
 					NewParameters = {'mode': Modes[NewMode]}
 					self.qR.put(NewParameters)
 				elif button[1] == 'Up':
-					if Parameters['mode'] == 'Smoke':
+					if self.Parameters['mode'] == 'Smoke':
 						NewParameters = {'PMode': self.Parameters['PMode'] + 1}
 					else:
 						NewParameters = {'target': self.Parameters['target'] + 5}
 					self.qR.put(NewParameters)
 				elif button[1] == 'Down':
-					if Parameters['mode'] == 'Smoke':
+					if self.Parameters['mode'] == 'Smoke':
 						NewParameters = {'PMode': self.Parameters['PMode'] - 1}
 					else:
 						NewParameters = {'target': self.Parameters['target'] - 5}
