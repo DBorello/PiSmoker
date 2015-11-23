@@ -204,8 +204,8 @@ def SetMode(Parameters, Temps):
 		G.SetState('fan',True)
 		G.SetState('auger',True)
 		CheckIgniter(Parameters, Temps)
-		Parameters['CycleTime'] = 80
-		Parameters['u'] = 15.0/(15.0+65.0) #P2
+		Parameters['CycleTime'] = 15+45
+		Parameters['u'] = 15.0/(15.0+45.0) #P0
 
 	elif Parameters['mode'] == 'Smoke':
 		G.SetState('fan',True)
