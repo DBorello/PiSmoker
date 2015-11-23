@@ -235,7 +235,7 @@ def DoMode(Parameters,Temps):
 			Parameters = SetMode(Parameters, Temps)
 		
 	elif Parameters['mode'] == 'Start':
-		DoAugerControl(Parameters,Temps)
+		DoAugerControl(Parameters,Temps) #
 		if Temps[-1][1] > 150:
 			Parameters['mode'] = 'Hold'
 			Parameters = SetMode(Parameters, Temps)
