@@ -98,9 +98,12 @@ def PostCallback(data=None):
 	pass
 		
 def ResetFirebase(Parameters):
-	r = firebase.put('/','Parameters',Parameters, {'print':'silent'})
-	r = firebase.delete('/','Temps')
-	r = firebase.delete('/','Controls')
+	try:
+		r = firebase.put('/','Parameters',Parameters, {'print':'silent'})
+		r = firebase.delete('/','Temps')
+		r = firebase.delete('/','Controls')
+	except:
+		logger.info('Error initializing Firebase')
 
 	#Post control state
 	D = {'time': time.time()*1000, 'u': 0, 'P':0, 'I': 0, 'D': 0, 'PID':0, 'Error':0, 'Derv':0, 'Inter':0}
