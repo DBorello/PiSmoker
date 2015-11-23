@@ -276,7 +276,7 @@ def CheckIgniter(Parameters, Temps):
 			G.SetState('igniter',False)
 
 		#Check if igniter has been running for too long
-		if (time.time() - G.ToggleTime['igniter']) > 600:
+		if (time.time() - G.ToggleTime['igniter']) > 600 and G.GetState('igniter'):
 			G.SetState('igniter',False)
 			Parameters['mode'] = 'Shutdown'
 			Parameters = SetMode(Parameters, Temps)
