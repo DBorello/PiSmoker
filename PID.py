@@ -23,7 +23,7 @@ class PID:
 
 		self.Derv = 0.0
 		self.Inter = 0.0
-		self.Inter_max = abs(1/self.Ki)
+		self.Inter_max = abs(0.5/self.Ki)
 
 		self.Last = 150
 
@@ -76,6 +76,7 @@ class PID:
 
 	def setGains(self, PB, Ti, Td):
 		self.CalculateGains(PB,Ti,Kd)
+		self.Inter_max = abs(0.5/self.Ki)
 		logger.info('New Gains (%f,%f,%f)', self.Kp, self.Ki, self.Kd)
 
 	def getK(self):
