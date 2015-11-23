@@ -31,7 +31,7 @@ IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
-Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15}
+Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15, 'PMode': 2.0}
  #60,180,45 held +- 5F
 
 #Initialize LCD
@@ -167,6 +167,11 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 				Parameters[k] = float(NewParameters[k])
 				Control.setGains(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
 				Parameters = WriteParameters(Parameters)
+		elif k == 'PMode':
+			if float(Parameters[k]) != float(NewParameters[k]):
+				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
+				Parameters[k] = float(NewParameters[k])
+				Parameters = WriteParameters(Parameters)
 		elif k == 'mode':
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
@@ -214,8 +219,10 @@ def SetMode(Parameters, Temps):
 		G.SetState('fan',True)
 		G.SetState('auger',True)
 		CheckIgniter(Parameters, Temps)
-		Parameters['CycleTime'] = 80
-		Parameters['u'] = 15.0/(15.0+65.0) #P2
+		On = 15
+		Off = 45 + Parameters['PMode']*10 #http://tipsforbbq.com/Definition/Traeger-P-Setting
+		Parameters['CycleTime'] = On + Off
+		Parameters['u'] = On / (On+Off)
 		
 	elif Parameters['mode'] == 'Hold':
 		G.SetState('fan',True)

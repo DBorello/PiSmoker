@@ -45,8 +45,10 @@ class LCDDisplay(threading.Thread):
 	def UpdateDisplay(self):
 		text = 'T%i G%i M%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
 
-		if self.Parameters['mode'] == 'Hold' or self.Parameters['mode'] == 'Smoke' or self.Parameters['mode'] == 'Start':
+		if self.Parameters['mode'] == 'Hold' or self.Parameters['mode'] == 'Start':
 			text += '%s %3.2f   %s' % (self.Parameters['mode'].ljust(5),self.Parameters['u'],self.GetCurrentState())
+		elif self.Parameters['mode'] == 'Smoke':
+			text += '%s P:%i    %s' % (self.Parameters['mode'].ljust(5),self.Parameters['PMode'],self.GetCurrentState())
 		else:
 			text += '%s' % (self.Parameters['mode'].ljust(16))
 
@@ -67,10 +69,16 @@ class LCDDisplay(threading.Thread):
 					NewParameters = {'mode': Modes[NewMode]}
 					self.qR.put(NewParameters)
 				elif button[1] == 'Up':
-					NewParameters = {'target': self.Parameters['target'] + 5}
+					if Parameters['mode'] == 'Smoke':
+						NewParameters = {'PMode': self.Parameters['PMode'] + 1}
+					else:
+						NewParameters = {'target': self.Parameters['target'] + 5}
 					self.qR.put(NewParameters)
 				elif button[1] == 'Down':
-					NewParameters = {'target': self.Parameters['target'] - 5}
+					if Parameters['mode'] == 'Smoke':
+						NewParameters = {'PMode': self.Parameters['PMode'] - 1}
+					else:
+						NewParameters = {'target': self.Parameters['target'] - 5}
 					self.qR.put(NewParameters)
 		
 	def GetCurrentMode(self):	
