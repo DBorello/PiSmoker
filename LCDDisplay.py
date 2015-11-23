@@ -32,7 +32,6 @@ class LCDDisplay(threading.Thread):
 
 
 	def run(self):
-		LastLCD = time.time()
 		while True:
 			self.GetButtons()
 			while not self.qP.empty():
@@ -40,8 +39,7 @@ class LCDDisplay(threading.Thread):
 			while not self.qT.empty():
 				self.Ts = self.qT.get()
 
-			if time.time() - LastLCD > 1:
-				self.UpdateDisplay()
+			self.UpdateDisplay()
 			time.sleep(0.01)
 			
 	def UpdateDisplay(self):
