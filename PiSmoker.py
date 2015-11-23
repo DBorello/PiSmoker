@@ -200,7 +200,7 @@ def SetMode(Parameters, Temps):
 		G.Initialize()
 		G.SetState('fan',True)
 
-	elif Parameters['mode'] == 'Startup':
+	elif Parameters['mode'] == 'Start':
 		G.SetState('fan',True)
 		G.SetState('auger',True)
 		CheckIgniter(Parameters, Temps)
@@ -234,7 +234,7 @@ def DoMode(Parameters,Temps):
 			Parameters['mode'] = 'Off'
 			Parameters = SetMode(Parameters, Temps)
 		
-	elif Parameters['mode'] == 'Startup':
+	elif Parameters['mode'] == 'Start':
 		DoAugerControl(Parameters,Temps)
 		if Temps[-1][1] > 150:
 			Parameters['mode'] = 'Hold'
