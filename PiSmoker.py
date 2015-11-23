@@ -256,8 +256,9 @@ def DoMode(Parameters,Temps):
 def DoAugerControl(Parameters,Temps):
 
 	#Auger currently on AND TimeSinceToggle > Auger On Time
-	if G.GetState('auger') and (time.time() - G.ToggleTime['auger']) > Parameters['CycleTime']*Parameters['u'] and Parameters['u'] < 1.00:
-		G.SetState('auger',False)
+	if G.GetState('auger') and (time.time() - G.ToggleTime['auger']) > Parameters['CycleTime']*Parameters['u']:
+		if Parameters['u'] < 1.0:
+			G.SetState('auger',False)
 		CheckIgniter(Parameters, Temps)
 		WriteParameters(Parameters)
 		
