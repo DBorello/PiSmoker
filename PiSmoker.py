@@ -49,6 +49,7 @@ T = []
 T.append(MAX31865.MAX31865(1,1000,4000)) #Grill
 T.append(MAX31865.MAX31865(0,100,400)) #Meat
 
+
 #Initialize Traeger Object
 G = Traeger.Traeger(Relays)
 
@@ -65,8 +66,8 @@ Control.setTarget(Parameters['target'])
 #Start firebase
 f = open('AuthToken.txt','r')
 Secret = f.read()
-print Secret
 f.close()
+Params = {'auth':Secret, 'print':'silent'}
 firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', Secret)
 
 
@@ -93,7 +94,7 @@ def RecordTemps(Parameters, Temps):
 
 def PostTemps(Parameters, Ts):
 	try:
-		r = firebase.post_async('/Temps', {'time': Ts[0]*1000, 'TT': Parameters['target'], 'T1': Ts[1], 'T2':Ts[2]} , params={'print': 'silent'}, callback=PostCallback)
+		r = firebase.post_async('/Temps', {'time': Ts[0]*1000, 'TT': Parameters['target'], 'T1': Ts[1], 'T2':Ts[2]} , params=Params, callback=PostCallback)
 	except:
 		logger.info('Error writing Temps to Firebase')
 
@@ -103,9 +104,9 @@ def PostCallback(data=None):
 		
 def ResetFirebase(Parameters):
 	try:
-		r = firebase.put('/','Parameters',Parameters, {'print':'silent'})
-		r = firebase.delete('/','Temps')
-		r = firebase.delete('/','Controls')
+		r = firebase.put('/','Parameters',Parameters, params=Params)
+		r = firebase.delete('/','Temps', params=Params)
+		r = firebase.delete('/','Controls', params=Params)
 	except:
 		logger.info('Error initializing Firebase')
 
@@ -113,7 +114,7 @@ def ResetFirebase(Parameters):
 	D = {'time': time.time()*1000, 'u': 0, 'P':0, 'I': 0, 'D': 0, 'PID':0, 'Error':0, 'Derv':0, 'Inter':0}
 
 	try:
-		r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
+		r = firebase.post_async('/Controls', D ,params=Params, callback=PostCallback)
 	except:
 		logger.info('Error writing Controls to Firebase')
 
@@ -128,7 +129,7 @@ def WriteParameters(Parameters):
 	qP.put(Parameters)
 			
 	try:
-		r = firebase.patch_async('/Parameters', Parameters, params={'print': 'silent'}, callback=PostCallback)
+		r = firebase.patch_async('/Parameters', Parameters, params=Params, callback=PostCallback)
 	except:
 		logger.info('Error writing parameters to Firebase')
 		
@@ -306,7 +307,7 @@ def DoControl(Parameters, Temps):
 		D = {'time': time.time()*1000, 'u': Parameters['u'], 'P': Control.P, 'I': Control.I, 'D': Control.D, 'PID': Control.u, 'Error':Control.error, 'Derv':Control.Derv, 'Inter':Control.Inter}
 
 		try:
-			r = firebase.post_async('/Controls', D , params={'print': 'silent'}, callback=PostCallback)
+			r = firebase.post_async('/Controls', D , params=Params, callback=PostCallback)
 		except:
 			logger.info('Error writing Controls to Firebase')
 
