@@ -64,7 +64,7 @@ Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
 Control.setTarget(Parameters['target'])
 
 #Start firebase
-f = open('AuthToken.txt','r')
+f = open('/home/pi/PiSmoker/AuthToken.txt','r')
 Secret = f.read()
 f.close()
 Params = {'auth':Secret, 'print':'silent'}
