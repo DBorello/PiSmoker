@@ -63,6 +63,10 @@ Control = PID.PID(Parameters['PB'],Parameters['Ti'],Parameters['Td'])
 Control.setTarget(Parameters['target'])
 
 #Start firebase
+f = open('AuthToken.txt','r')
+Secret = f.read()
+print Secret
+f.close()
 firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None)
 
 
