@@ -67,7 +67,7 @@ f = open('AuthToken.txt','r')
 Secret = f.read()
 print Secret
 f.close()
-firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/', Secret)
 
 
 def RecordTemps(Parameters, Temps):
