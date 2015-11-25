@@ -31,15 +31,6 @@ Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 
 logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
 logger = logging.getLogger('PiSmoker')
 
-#Initialize LCD
-qP = Queue.Queue() #Queue for Parameters
-qT = Queue.Queue() #Queue for Temps
-qR = Queue.Queue() #Return for Parameters
-qP.put(Parameters)
-qT.put([0,0,0])
-lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
-lcd.setDaemon(True)
-lcd.start()
 
 #Initialize RTD Probes
 T = []
@@ -68,6 +59,15 @@ Params = {'print':'silent'}
 Params = {'auth':Secret, 'print':'silent'} # ".write": "auth !== null"
 firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/')
 
+#Initialize LCD
+qP = Queue.Queue() #Queue for Parameters
+qT = Queue.Queue() #Queue for Temps
+qR = Queue.Queue() #Return for Parameters
+qP.put(Parameters)
+qT.put([0,0,0])
+lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
+lcd.setDaemon(True)
+lcd.start()
 
 def RecordTemps(Parameters, Temps):
 	if len(Temps) == 0 or time.time() - Temps[-1][0] > TempInterval:
