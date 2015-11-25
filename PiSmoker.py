@@ -67,8 +67,8 @@ Control.setTarget(Parameters['target'])
 f = open('/home/pi/PiSmoker/AuthToken.txt','r')
 Secret = f.read()
 f.close()
-#Params = {'auth':Secret, 'print':'silent'}
 Params = {'print':'silent'}
+Params = {'auth':Secret, 'print':'silent'} # ".write": "auth !== null"
 firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/')
 
 
@@ -104,11 +104,11 @@ def PostCallback(data=None):
 	pass
 		
 def ResetFirebase(Parameters):
-	r = firebase.put('/','Parameters',Parameters, params=Params)
-	r = firebase.delete('/','Temps', params=Params)
-	r = firebase.delete('/','Controls', params=Params)
+
 	try:
-		pass
+		r = firebase.put('/','Parameters',Parameters, params=Params)
+		r = firebase.delete('/','Temps', params=Params)
+		r = firebase.delete('/','Controls', params=Params)
 	except:
 		logger.info('Error initializing Firebase')
 
