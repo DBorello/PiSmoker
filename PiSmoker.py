@@ -58,7 +58,6 @@ f.close()
 Params = {'print':'silent'}
 Params = {'auth':Secret, 'print':'silent'} # ".write": "auth !== null"
 firebase = firebase.FirebaseApplication('https://pismoker.firebaseio.com/')
-ResetFirebase(Parameters)
 
 #Initialize LCD
 qP = Queue.Queue() #Queue for Parameters
@@ -325,6 +324,7 @@ Parameters = WriteParameters(Parameters)
 
 #Setup variables
 Temps = [] #List, [time, T[0], T[1]...]
+ResetFirebase(Parameters)
 
 #Set mode
 SetMode(Parameters, Temps)
