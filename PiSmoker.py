@@ -92,7 +92,7 @@ def RecordTemps(Parameters, Temps):
 
 def PostTemps(Parameters, Ts):
 	try:
-		r = firebase.post_async('/Temps', {'time': 'Firebase.ServerValue.TIMESTAMP', 'TT': Parameters['target'], 'T1': Ts[1], 'T2':Ts[2]} , params=Params, callback=PostCallback)
+		r = firebase.post_async('/Temps', {'time': Ts[0]*1000, 'TT': Parameters['target'], 'T1': Ts[1], 'T2':Ts[2]} , params=Params, callback=PostCallback)
 	except:
 		logger.info('Error writing Temps to Firebase')
 
