@@ -34,7 +34,7 @@ logger = logging.getLogger('PiSmoker')
 #Initialize LCD
 qP = Queue.Queue() #Queue for Parameters
 qT = Queue.Queue() #Queue for Temps
-qR = Queue.Queue() #Return for Parameter
+qR = Queue.Queue() #Return for Parameters
 qP.put(Parameters)
 qT.put([0,0,0])
 lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
