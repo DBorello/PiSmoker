@@ -1,23 +1,28 @@
+Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15, 'PMode': 2.0}  #60,180,45 held +- 5F
+
+#Initialize LCD
+import Queue, LCDDisplay
+qP = Queue.Queue() #Queue for Parameters
+qT = Queue.Queue() #Queue for Temps
+qR = Queue.Queue() #Return for Parameters
+qP.put(Parameters)
+qT.put([0,0,0])
+lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
+lcd.setDaemon(True)
+lcd.start()
+
 import time
 import json
 import os
 import datetime
 import logging
 import logging.config
-import Queue
 import numpy as np
 import RPi.GPIO as GPIO
 import MAX31865
 import Traeger
 import PID as PID
-import LCDDisplay
 from firebase import firebase
-
-#Start logging
-logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
-logger = logging.getLogger('PiSmoker')
-
-
 
 #Parameters
 TempInterval = 3 #Frequency to record temperatures
@@ -31,18 +36,10 @@ IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
-Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15, 'PMode': 2.0}
- #60,180,45 held +- 5F
 
-#Initialize LCD
-qP = Queue.Queue() #Queue for Parameters
-qT = Queue.Queue() #Queue for Temps
-qR = Queue.Queue() #Return for Parameters
-qP.put(Parameters)
-qT.put([0,0,0])
-lcd = LCDDisplay.LCDDisplay(qP, qT, qR)
-lcd.setDaemon(True)
-lcd.start()
+#Start logging
+logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
+logger = logging.getLogger('PiSmoker')
 
 #Initialize RTD Probes
 T = []
