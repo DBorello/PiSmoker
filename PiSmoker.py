@@ -333,6 +333,7 @@ Parameters['LastReadWeb'] = time.time()
 ###############
 #Main Loop    #
 ###############
+time.sleep(3) #Wait for clock to sync
 while 1:
 	#Record temperatures
 	Temps = RecordTemps(Parameters, Temps)
