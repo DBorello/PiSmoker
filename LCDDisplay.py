@@ -87,6 +87,7 @@ class LCDDisplay(threading.Thread):
 					else:
 						NewParameters = {'target': self.Parameters['target'] - 5}
 					self.qR.put(NewParameters)
+				time.sleep(0.03)
 		
 	def GetCurrentMode(self):	
 		for i in range(len(Modes)):
