@@ -30,7 +30,8 @@ class LCDDisplay(threading.Thread):
 		self.qT = qT
 		self.qR = qR
 
-
+		self.Display = ''
+		
 	def run(self):
 		while True:
 			self.GetButtons()
@@ -51,14 +52,20 @@ class LCDDisplay(threading.Thread):
 			text += '%s P:%i    %s' % (self.Parameters['mode'].ljust(5),self.Parameters['PMode'],self.GetCurrentState())
 		else:
 			text += '%s' % (self.Parameters['mode'].ljust(16))
+		
+		self.Send2Display(text)
 
-		try:
-			self.lcd.home()
-			self.lcd.message(text)
-		except:
-			logger.info('Unable to update LCD - %s',text)
-
-
+			
+	def Send2Display(self,text):
+		if self.Display != text:
+			self.Display = text
+			try:
+				self.lcd.clear()
+				self.lcd.message(text)
+			except:
+				logger.info('Unable to update LCD - %s',text)
+	
+			
 	def GetButtons(self):
 		for button in buttons:
 			if self.lcd.is_pressed(button[0]):
