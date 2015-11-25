@@ -43,8 +43,8 @@ class LCDDisplay(threading.Thread):
 			time.sleep(0.05)
 			
 	def UpdateDisplay(self):
-		text = 'T%i G%i M%i\n' % (self.Parameters['target'],self.Ts[1],self.Ts[2])
-
+		text = 'T%i G%i M%i'.ljust(16) % (self.Parameters['target'],self.Ts[1],self.Ts[2])
+		text += '\n'
 		if self.Parameters['mode'] == 'Hold' or self.Parameters['mode'] == 'Start':
 			text += '%s %3.2f   %s' % (self.Parameters['mode'].ljust(5),self.Parameters['u'],self.GetCurrentState())
 		elif self.Parameters['mode'] == 'Smoke':
