@@ -68,26 +68,29 @@ class LCDDisplay(threading.Thread):
 			
 	def GetButtons(self):
 		for button in buttons:
-			if self.lcd.is_pressed(button[0]):
-				if button[1] == 'Mode':
-					NewMode =  self.GetCurrentMode() + 1
-					if NewMode == len(Modes):
-						NewMode = 0
-					NewParameters = {'mode': Modes[NewMode]}
-					self.qR.put(NewParameters)
-				elif button[1] == 'Up':
-					if self.Parameters['mode'] == 'Smoke':
-						NewParameters = {'PMode': self.Parameters['PMode'] + 1}
-					else:
-						NewParameters = {'target': self.Parameters['target'] + 5}
-					self.qR.put(NewParameters)
-				elif button[1] == 'Down':
-					if self.Parameters['mode'] == 'Smoke':
-						NewParameters = {'PMode': self.Parameters['PMode'] - 1}
-					else:
-						NewParameters = {'target': self.Parameters['target'] - 5}
-					self.qR.put(NewParameters)
-				time.sleep(0.03)
+			try:
+				if self.lcd.is_pressed(button[0]):
+					if button[1] == 'Mode':
+						NewMode =  self.GetCurrentMode() + 1
+						if NewMode == len(Modes):
+							NewMode = 0
+						NewParameters = {'mode': Modes[NewMode]}
+						self.qR.put(NewParameters)
+					elif button[1] == 'Up':
+						if self.Parameters['mode'] == 'Smoke':
+							NewParameters = {'PMode': self.Parameters['PMode'] + 1}
+						else:
+							NewParameters = {'target': self.Parameters['target'] + 5}
+						self.qR.put(NewParameters)
+					elif button[1] == 'Down':
+						if self.Parameters['mode'] == 'Smoke':
+							NewParameters = {'PMode': self.Parameters['PMode'] - 1}
+						else:
+							NewParameters = {'target': self.Parameters['target'] - 5}
+						self.qR.put(NewParameters)
+					time.sleep(0.03)
+			except:
+				logger.info('Unable to read buttons')
 		
 	def GetCurrentMode(self):	
 		for i in range(len(Modes)):
