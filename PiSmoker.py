@@ -26,7 +26,7 @@ IgniterTemperature = 100 #Temperature to start igniter
 ShutdownTime = 10*60 # Time to run fan after shutdown
 Relays = {'auger': 22, 'fan': 18, 'igniter': 16} #Board
 Relays = {'auger': 25, 'fan': 24, 'igniter': 23}  #BCM
-Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15, 'PMode': 2.0}  #60,180,45 held +- 5F
+Parameters = {'mode': 'Off', 'target':225, 'PB': 60.0, 'Ti': 180.0, 'Td': 45.0, 'CycleTime': 20, 'u': 0.15, 'PMode': 2.0, 'program': false, 'ProgramToggle': time.time()}  #60,180,45 held +- 5F
 
 #Start logging
 logging.config.fileConfig('/home/pi/PiSmoker/logging.conf')
@@ -317,7 +317,7 @@ def DoControl(Parameters, Temps):
 		
 	return Parameters
 
-def GetProgram(Program):
+def GetProgram(Parameters, Program):
 	if time.time() - Parameters['LastReadProgram'] > ReadProgramInterval:
 		try:
 			raw  = firebase.get('/Program', None)
@@ -333,10 +333,54 @@ def GetProgram(Program):
 					logger.info('Detected new program')
 					Program = NewProgram
 
+
 		except:
 			logger.info('Error reading Program from Firebase')
 		Parameters['LastReadProgram'] = time.time()
 	return Program
+
+def EvaluateTriggers(Parameters, Temps, Program):
+	if Parameters['program']:
+		P = Program[0]
+
+		if P['trigger'] == 'Time':
+			if time.time() - Parameters['ProgramToggle'] > P['triggerValue']:
+				(Parameters,Program) = NextProgram(Parameters, Program)
+
+		elif P['trigger'] == 'MeatTemp':
+			if Temps[-1][2] > P['triggerValue']:
+				(Parameters,Program) = NextProgram(Parameters, Program)
+
+	return (Parameters, Program)
+
+def NextProgram(Parameters, Program)
+	Program.pop(0) #Remove current program
+
+	Parameters = SetProgram(Program)
+	WriteProgram(Program)
+	return (Parameters, Program)
+
+def SetProgram(Parameters, Program):
+	if Parameters['program']:
+		Parameters['ProgramToggle'] = time.time()
+
+		P = Program[0]
+		Parameters['mode'] = P['mode']
+		Parameters = SetMode(Parameters, Temps)
+
+		Parameters['target'] = P['target']
+		Control.setTarget(Parameters['target'])
+		Parameters = WriteParameters(Parameters)
+
+	return Parameters
+
+def WriteProgram(Program):
+	try:
+		r = firebase.post_async('/Program', Program , params=Params, callback=PostCallback)
+	except:
+		logger.info('Error writing Program to Firebase')
+
+
 ##############
 #Setup       #
 ##############
@@ -367,9 +411,15 @@ while 1:
 	Parameters = ReadParameters(Parameters, Temps)
 
 	#Check for new program
-	Program = GetProgram(Program)
+	Program = GetProgram(Parameters, Program)
+
+	#Evaluate triggers
+	(Parameters, Program) = EvaluateTriggers(Parameters, Temps, Program)
 
 	#Do mode
 	Parameters = DoMode(Parameters,Temps)
+
+
+
 			
 	time.sleep(0.05)
