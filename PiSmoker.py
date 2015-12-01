@@ -20,7 +20,6 @@ ParametersInterval = 1#Frequency to write parameters
 PIDCycleTime = 20#Frequency to update control loop
 ReadParametersInterval =3  #Frequency to poll web for new parameters
 ReadProgramInterval = 15 #Freqnency to poll web for new program
-LastProgramTime = time.time()
 u_min = 0.15 #Maintenance level
 u_max = 1.0 #
 IgniterTemperature = 100 #Temperature to start igniter
@@ -319,7 +318,7 @@ def DoControl(Parameters, Temps):
 	return Parameters
 
 def GetProgram(Program):
-	if time.time() - LastProgramTime > ReadProgramInterval:
+	if time.time() - Parameters['LastReadProgram'] > ReadProgramInterval:
 		raw  = firebase.get('/Program', None)
 		NewProgram = []
 
@@ -330,7 +329,7 @@ def GetProgram(Program):
 		if Program != NewProgram:
 			pass #do something
 
-		LastProgramTime = time.time()
+		Parameters['LastReadProgram'] = time.time()
 
 	return NewProgram
 
@@ -345,7 +344,7 @@ Parameters = WriteParameters(Parameters)
 Temps = [] #List, [time, T[0], T[1]...]
 Program = []
 ResetFirebase(Parameters)
-
+Parameters['LastReadProgram'] = time.time()
 Parameters['LastReadWeb'] = time.time()
 
 #Set mode
