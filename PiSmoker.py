@@ -319,19 +319,20 @@ def DoControl(Parameters, Temps):
 
 def GetProgram(Program):
 	if time.time() - Parameters['LastReadProgram'] > ReadProgramInterval:
-		raw  = firebase.get('/Program', None)
-		NewProgram = []
+		try:
+			raw  = firebase.get('/Program', None)
+			NewProgram = []
 
-		for k in sorted(raw.items()):
-			NewProgram.append(k[1])
+			for k in sorted(raw.items()):
+				NewProgram.append(k[1])
 
-		#Check if program is new
-		if Program != NewProgram:
-			pass #do something
+			#Check if program is new
+			if Program != NewProgram:
+				pass #do something
 
-		Parameters['LastReadProgram'] = time.time()
+			Parameters['LastReadProgram'] = time.time()
 
-		return NewProgram
+			return NewProgram
 	return Program
 ##############
 #Setup       #
