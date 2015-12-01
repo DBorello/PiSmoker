@@ -354,6 +354,7 @@ def EvaluateTriggers(Parameters, Temps, Program):
 	return (Parameters, Program)
 
 def NextProgram(Parameters, Program):
+	logger.info('Advancing to next program')
 	Program.pop(0) #Remove current program
 
 	Parameters = SetProgram(Program)
@@ -361,16 +362,15 @@ def NextProgram(Parameters, Program):
 	return (Parameters, Program)
 
 def SetProgram(Parameters, Program):
-	if Parameters['program']:
-		Parameters['ProgramToggle'] = time.time()
+	Parameters['ProgramToggle'] = time.time()
 
-		P = Program[0]
-		Parameters['mode'] = P['mode']
-		Parameters = SetMode(Parameters, Temps)
+	P = Program[0]
+	Parameters['mode'] = P['mode']
+	Parameters = SetMode(Parameters, Temps)
 
-		Parameters['target'] = P['target']
-		Control.setTarget(Parameters['target'])
-		Parameters = WriteParameters(Parameters)
+	Parameters['target'] = P['target']
+	Control.setTarget(Parameters['target'])
+	Parameters = WriteParameters(Parameters)
 
 	return Parameters
 
