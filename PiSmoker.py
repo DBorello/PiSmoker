@@ -370,6 +370,7 @@ def NextProgram(Parameters, Program):
 	if len(Program) > 0:
 		Parameters = SetProgram(Parameters, Program)
 
+	WriteProgram(Program)
 	return (Parameters, Program)
 
 def SetProgram(Parameters, Program):
