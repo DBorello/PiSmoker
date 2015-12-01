@@ -137,12 +137,12 @@ def WriteParameters(Parameters):
 	return Parameters
 
 
-def ReadParameters(Parameters, Temps):
+def ReadParameters(Parameters, Temps, Program):
 	'''Read parameters file written by web server and LCD'''
 	#Read from queue
 	while not qR.empty():
 		NewParameters = qR.get()
-		Parameters = UpdateParameters(NewParameters,Parameters,Temps)
+		Parameters = UpdateParameters(NewParameters,Parameters,Temps, Program)
 		
 	#Read from webserver
 	if time.time() - Parameters['LastReadWeb'] > ReadParametersInterval:
@@ -150,7 +150,7 @@ def ReadParameters(Parameters, Temps):
 		try:
 			NewParameters = firebase.get('/Parameters',None )
 			#logger.info('New parameters from firebase: %s',NewParameters)
-			Parameters = UpdateParameters(NewParameters,Parameters,Temps)
+			Parameters = UpdateParameters(NewParameters,Parameters,Temps, Program)
 		except:
 			logger.info('Error reading parameters from Firebase')
 			return Parameters
@@ -158,7 +158,7 @@ def ReadParameters(Parameters, Temps):
 	return Parameters
 
 
-def UpdateParameters(NewParameters,Parameters,Temps):
+def UpdateParameters(NewParameters,Parameters,Temps, Program):
 	#Loop through each key, see what changed
 	for k in NewParameters.keys():
 		if k == 'target':
@@ -188,7 +188,7 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
 				Parameters[k] = NewParameters[k]
-				#Parameters = SetProgram(Parameters, Program)
+				Parameters = SetProgram(Parameters, Program)
 				Parameters = WriteParameters(Parameters)
 
 
@@ -417,7 +417,7 @@ while 1:
 	Temps = RecordTemps(Parameters, Temps)
 		
 	#Check for new parameters
-	Parameters = ReadParameters(Parameters, Temps)
+	Parameters = ReadParameters(Parameters, Temps, Program)
 
 	#Check for new program
 	Program = GetProgram(Parameters, Program)
