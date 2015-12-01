@@ -353,7 +353,7 @@ def EvaluateTriggers(Parameters, Temps, Program):
 
 	return (Parameters, Program)
 
-def NextProgram(Parameters, Program)
+def NextProgram(Parameters, Program):
 	Program.pop(0) #Remove current program
 
 	Parameters = SetProgram(Program)
