@@ -321,18 +321,19 @@ def GetProgram(Program):
 	if time.time() - Parameters['LastReadProgram'] > ReadProgramInterval:
 		try:
 			raw  = firebase.get('/Program', None)
-			NewProgram = []
 
-			for k in sorted(raw.items()):
-				NewProgram.append(k[1])
 
-			#Check if program is new
-			if Program != NewProgram:
-				pass #do something
+			if raw is not None:
+				NewProgram = []
+				for k in sorted(raw.items()):
+					NewProgram.append(k[1])
 
-			Parameters['LastReadProgram'] = time.time()
+				#Check if program is new
+				if Program != NewProgram:
+					Program = NewProgram
 
-			return NewProgram
+
+		Parameters['LastReadProgram'] = time.time()
 	return Program
 ##############
 #Setup       #
