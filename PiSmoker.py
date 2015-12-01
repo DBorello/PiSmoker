@@ -163,10 +163,11 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 	for k in NewParameters.keys():
 		if k == 'target':
 			if float(Parameters[k]) != float(NewParameters[k]):
-				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
-				Control.setTarget(float(NewParameters[k]))
-				Parameters[k] = float(NewParameters[k])
-				Parameters = WriteParameters(Parameters)
+				if ~Parameters['program']:
+					logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
+					Control.setTarget(float(NewParameters[k]))
+					Parameters[k] = float(NewParameters[k])
+					Parameters = WriteParameters(Parameters)
 		elif k == 'PB' or k == 'Ti' or k == 'Td':
 			if float(Parameters[k]) != float(NewParameters[k]):
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
@@ -180,10 +181,11 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 				Parameters = WriteParameters(Parameters)
 		elif k == 'mode':
 			if Parameters[k] != NewParameters[k]:
-				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
-				Parameters[k] = NewParameters[k]
-				Parameters = SetMode(Parameters, Temps)
-				Parameters = WriteParameters(Parameters)
+				if ~Parameters['program']:
+					logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
+					Parameters[k] = NewParameters[k]
+					Parameters = SetMode(Parameters, Temps)
+					Parameters = WriteParameters(Parameters)
 		elif k == 'program':
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
@@ -351,11 +353,11 @@ def EvaluateTriggers(Parameters, Temps, Program):
 		P = Program[0]
 
 		if P['trigger'] == 'Time':
-			if time.time() - Parameters['ProgramToggle'] > P['triggerValue']:
+			if time.time() - Parameters['ProgramToggle'] > float(P['triggerValue']):
 				(Parameters,Program) = NextProgram(Parameters, Program)
 
 		elif P['trigger'] == 'MeatTemp':
-			if Temps[-1][2] > P['triggerValue']:
+			if Temps[-1][2] > float(P['triggerValue']):
 				(Parameters,Program) = NextProgram(Parameters, Program)
 
 	return (Parameters, Program)
@@ -378,7 +380,7 @@ def SetProgram(Parameters, Program):
 		Parameters['mode'] = P['mode']
 		Parameters = SetMode(Parameters, Temps)
 
-		Parameters['target'] = P['target']
+		Parameters['target'] = float(P['target'])
 		Control.setTarget(Parameters['target'])
 		Parameters = WriteParameters(Parameters)
 
