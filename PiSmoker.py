@@ -384,6 +384,7 @@ def SetProgram(Parameters, Program):
 		Parameters['target'] = float(P['target'])
 		Control.setTarget(Parameters['target'])
 		Parameters = WriteParameters(Parameters)
+		time.sleep(1)
 
 	return Parameters
 
