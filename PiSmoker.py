@@ -384,7 +384,6 @@ def NextProgram(Parameters, Program):
 	if len(Program) > 0:
 		Parameters = SetProgram(Parameters, Program)
 
-	WriteProgram(Program)
 	return (Parameters, Program)
 
 def SetProgram(Parameters, Program):
@@ -403,7 +402,7 @@ def SetProgram(Parameters, Program):
 
 def WriteProgram(Program):
 	try:
-		r = firebase.post_async('/Program', Program , params=Params, callback=PostCallback)
+		r = firebase.post('/Program', Program , params=Params)
 	except:
 		logger.info('Error writing Program to Firebase')
 
