@@ -184,6 +184,11 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 				Parameters[k] = NewParameters[k]
 				Parameters = SetMode(Parameters, Temps)
 				Parameters = WriteParameters(Parameters)
+		elif k == 'program':
+			if Parameters[k] != NewParameters[k]:
+				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
+				Parameters = SetProgram(Parameters, Program)
+
 
 	return Parameters
 
@@ -359,7 +364,7 @@ def NextProgram(Parameters, Program):
 
 	WriteProgram(Program)
 	if len(Program) > 0:
-		Parameters = SetProgram(Program)
+		Parameters = SetProgram(Parameters, Program)
 
 	return (Parameters, Program)
 
