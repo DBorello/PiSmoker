@@ -330,6 +330,7 @@ def GetProgram(Program):
 
 				#Check if program is new
 				if Program != NewProgram:
+					logger.info('Detected new program',NewProgram)
 					Program = NewProgram
 
 		except:
