@@ -4,29 +4,29 @@
 	<meta name="viewport" content="width=device-width">
 
 	<title>PiSmoker</title>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-	<link href="layout.css" rel="stylesheet" type="text/css">
-	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<link href="css/layout.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="css/angular-toggle-switch-bootstrap-3.css" type="text/css" media="screen">
 
-	
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.time.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular.js"></script>
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+
 	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+	<script src="js/angular-toggle-switch.min.js"></script>
 
 	<script src="js/angularScripts.js"></script>
 	
 	<script src="js/justgage-1.1.0.min.js"></script>	
 </head>
 
-<body>
+<body ng-app="PiSmoker">
 	<title>PiSmoker</title>
-	8
 	<div id="content" class="container">
 		<div class="row">
 			<div class="col-xs-6 center-block">
@@ -45,47 +45,35 @@
 			</div>
 		</div>
 		
-		<div class="row">
+		<div class="row" ng-controller="ParametersController as parmctrl">
 			<form action="blah" method="post" name="parameters" id="parameters" class="form">
 				<div class="col-xs-6" align="left">
-					<label class="checkbox">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="info" id="fan" name="fan"> Fan
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="danger" id="igniter" name="igniter"> Igniter
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="success" id="auger" name="auger"> Auger
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="warning" id="auth" name="auth"> Authenticated
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="primary" id="active" name="active"> Active
-					</label>
+					<toggle-switch class="switch-info" knob-label="Fan" ng-model="Parameters.fan"></toggle-switch>
+					<toggle-switch class="switch-danger" knob-label="Igniter" ng-model="Parameters.igniter"></toggle-switch>
+					<toggle-switch class="switch-success" knob-label="Auger" ng-model="Parameters.auger"></toggle-switch>
+					<br>
+					<toggle-switch class="switch-warning" knob-label="Auth" ng-model="parmctrl.Auth"></toggle-switch>
+					<toggle-switch class="switch-primary" knob-label="Active" ng-model="parmctrl.Active"></toggle-switch>
 				</div>
 				<div class="col-xs-6" id="ParmForm">
 					<div class="form-group">
-						<label for="target" class="sr-only">Target</label>
 						<div class="input-group">
 							<div class="input-group-addon">Target</div>
-							<input type="text" name="target" id ="target" class="form-control">
+							<input type="text" class="form-control"  ng-model="Parameters.target">
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label for="PMode" class="sr-only">PMode</label>
 						<div class="input-group">
 							<div class="input-group-addon">PMode</div>
-							<input type="text" name="PMode" id ="PMode" class="form-control">
+							<input type="text" class="form-control" ng-model="Parameters.PMode">
 						</div>
 					</div>
 					
 					<div class="form-group">
-						<label for="mode" class="sr-only">Mode</label>
 						<div class="input-group">
 							<div class="input-group-addon">Mode</div>
-							<select name="mode" class="form-control">
+							<select name="mode" class="form-control" ng-model="Parameters.mode">
 								<option value="Off">Off</option>
 								<option value="Start">Start</option>
 								<option value="Smoke">Smoke</option>
@@ -98,31 +86,24 @@
 					
 					<div class="form-inline">
 						<div class="input-group">
-							<label for="P" class="sr-only">PB</label>
 							<div class="input-group-addon">PB</div>
-							<input type="text" name="PB" class="form-control span2"><br>
+							<input type="text" class="form-control span2" ng-model="Parameters.PB"><br>
 
-							<label for="I" class="sr-only">Ti</label>
 							<div class="input-group-addon">Ti</div>
-							<input type="text" name="Ti" class="form-control span2"><br>
+							<input type="text" class="form-control span2" ng-model="Parameters.Ti"><br>
 
-							<label for="D" class="sr-only">Td</label>
 							<div class="input-group-addon">Td</div>
-							<input type="text" name="Td" class="form-control span2"><br>
+							<input type="text" class="form-control span2" ng-model="Parameters.Td"><br>
 
 						</div>
 					</div>
-
-					<label class="checkbox">
-						<input type="checkbox" data-toggle="toggle" data-onstyle="primary" id="program" name="program"> Program
-					</label>
+					<br>
+					<toggle-switch class="switch-primary" knob-label="Program" ng-model="Parameters.program"></toggle-switch>
 					
 				</div>
 			</form>
 
 			<div>
-				<br><br><br><br>
-				<button onclick="sendParameters()" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Update</button>
 				<button onclick="clearData()" class="btn btn-info"><i class="glyphicon glyphicon-minus"></i> Clear Data</button>
 			</div>
 		</div>
@@ -135,9 +116,10 @@
 			</div>
 		</div>
 		<hr>
+
 		<div class="row">
 			<div class="col-xs-12">
-				<div class="Program-container" ng-app="Program" ng-controller="ProgramController as pctrl">
+				<div class="Program-container"  ng-controller="ProgramController as pctrl">
 					<div class="form-horizontal">
 						<div class="input-group" ng-repeat="program in pctrl.Program">
 
@@ -168,7 +150,6 @@
 						</div>
 
 						<br>
-						<button class="btn btn-success" ng-click="pctrl.submit()"><i class="glyphicon glyphicon-ok"></i> Submit</button>
 						<button class="btn btn-info" ng-click="pctrl.add()"><i class="glyphicon glyphicon-plus"></i>Add</button>
 
 					</div>

@@ -81,7 +81,6 @@ function UpdatePlot() {
 		if (T1.length > 0) {
 			gG.refresh(T1[T1.length-1][1]);
 			gM.refresh(T2[T2.length-1][1]);
-			CheckActive()
 		}
 }
 
@@ -157,16 +156,6 @@ var TempsRef = Ref.child('Temps');
 var ParametersRef = Ref.child('Parameters');
 var ProgramRef = Ref.child('Program');
 
-Ref.authWithCustomToken(window.location.search.substring(1), function(error, authData) {
-  if (error) {
-    //console.log("Login Failed!", error);
-	document.getElementById('ParmForm').style.visibility = 'hidden'
-  } else {
-    //console.log("Login Succeeded!", authData);
-	$('#auth').prop('checked', true).change();
-  }
-});
-
 TempsRef.once("value", function(snapshot) {
 	var Ts = snapshot.val();
 	for (var k in Ts) {
@@ -189,61 +178,12 @@ TempsRef.on("child_removed", function(snapshot, prevChildKey) {
   UpdatePlot()
 });
 
-ParametersRef.once('value', function(snapshot) {
-	var Parameters = snapshot.val();
-	for (var k in Parameters){
-		 if ( document.forms['parameters'].elements[k] != undefined ) {
-			if (k == 'fan' || k == 'igniter' || k == 'auger') {
-				$('#' + k).prop('checked', Parameters[k]).change()
-			} else {
-				document.forms['parameters'].elements[k].value = Parameters[k];
-			}
-		}
-	}
-});
 
-ParametersRef.on('child_changed', function(snapshot) {
-	var k = snapshot.key();
-	if ( document.forms['parameters'].elements[k] != undefined ) {
-		if (k == 'fan' || k == 'igniter' || k == 'auger') {
-			$('#' + k).prop('checked', snapshot.val()).change()
-		} else {
-		document.forms['parameters'].elements[k].value = snapshot.val();
-		}
-	}
-	
-});
-
-function sendParameters() {
-	var elements = document.getElementById("parameters").elements;
-	var Data = new Object();
-	for (var i = 0, element; element = elements[i++];) {
-		if (element.name == 'fan' || element.name == 'igniter' || element.name == 'auger' || element.name == '') {
-			1
-		} else if (element.name == 'program') {
-			Data[element.name]= element.checked;
-		}	else {
-				Data[element.name]= element.value
-		}
-	}
-	ParametersRef.update(Data);
-	return false;
-}
 
 function clearData() {
 	TempsRef.remove();
 	ControlsRef.remove();
 }
 
-function CheckActive() {
-	if (T1.length > 0 && ((new Date).getTime() - T1[T1.length-1][0]) < 5000  ) {
-		$('#active').prop('checked', true).change();
-	} else {
-		$('#active').prop('checked', false).change();
-		//console.log('Inactive: ',T1.length > 0 && ((new Date).getTime() - T1[T1.length-1][0]));
-	}
-}
 
-CheckActive()
-setInterval(CheckActive, 5000);
 document.getElementById('ControlsRow').style.display = 'none'
