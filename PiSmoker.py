@@ -152,7 +152,7 @@ def ReadParameters(Parameters, Temps):
 			#logger.info('New parameters from firebase: %s',NewParameters)
 			Parameters = UpdateParameters(NewParameters,Parameters,Temps)
 		except:
-			logger.info('Error reading parameters to Firebase')
+			logger.info('Error reading parameters from Firebase')
 			return Parameters
 		
 	return Parameters
@@ -187,6 +187,7 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 		elif k == 'program':
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
+				Parameters[k] = NewParameters[k]
 				Parameters = SetProgram(Parameters, Program)
 				Parameters = WriteParameters(Parameters)
 
