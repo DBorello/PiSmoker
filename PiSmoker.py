@@ -331,8 +331,8 @@ def GetProgram(Program):
 
 		Parameters['LastReadProgram'] = time.time()
 
-	return NewProgram
-
+		return NewProgram
+	return Program
 ##############
 #Setup       #
 ##############
