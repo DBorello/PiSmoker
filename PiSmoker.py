@@ -332,7 +332,8 @@ def GetProgram(Program):
 				if Program != NewProgram:
 					Program = NewProgram
 
-
+		except:
+			logger.info('Error reading Program from Firebase')
 		Parameters['LastReadProgram'] = time.time()
 	return Program
 ##############
