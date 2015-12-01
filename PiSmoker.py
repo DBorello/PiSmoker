@@ -137,6 +137,22 @@ def WriteParameters(Parameters):
 	return Parameters
 
 
+def WriteParameters_sync(Parameters):
+	'''Write parameters to file'''
+
+	for r in Relays:
+		Parameters[r] = G.GetState(r)
+
+	Parameters['LastWritten'] = time.time()
+	qP.put(Parameters)
+
+	try:
+		r = firebase.patch('/Parameters', Parameters, params=Params)
+	except:
+		logger.info('Error writing parameters to Firebase')
+
+	return Parameters
+
 def ReadParameters(Parameters, Temps, Program):
 	'''Read parameters file written by web server and LCD'''
 	#Read from queue
@@ -163,11 +179,10 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 	for k in NewParameters.keys():
 		if k == 'target':
 			if float(Parameters[k]) != float(NewParameters[k]):
-				if ~Parameters['program']:
-					logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
-					Control.setTarget(float(NewParameters[k]))
-					Parameters[k] = float(NewParameters[k])
-					Parameters = WriteParameters(Parameters)
+				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
+				Control.setTarget(float(NewParameters[k]))
+				Parameters[k] = float(NewParameters[k])
+				Parameters = WriteParameters(Parameters)
 		elif k == 'PB' or k == 'Ti' or k == 'Td':
 			if float(Parameters[k]) != float(NewParameters[k]):
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
@@ -181,11 +196,10 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 				Parameters = WriteParameters(Parameters)
 		elif k == 'mode':
 			if Parameters[k] != NewParameters[k]:
-				if ~Parameters['program']:
-					logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
-					Parameters[k] = NewParameters[k]
-					Parameters = SetMode(Parameters, Temps)
-					Parameters = WriteParameters(Parameters)
+				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
+				Parameters[k] = NewParameters[k]
+				Parameters = SetMode(Parameters, Temps)
+				Parameters = WriteParameters(Parameters)
 		elif k == 'program':
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
@@ -383,8 +397,7 @@ def SetProgram(Parameters, Program):
 
 		Parameters['target'] = float(P['target'])
 		Control.setTarget(Parameters['target'])
-		Parameters = WriteParameters(Parameters)
-		time.sleep(1)
+		Parameters = WriteParameters_sync(Parameters)
 
 	return Parameters
 
