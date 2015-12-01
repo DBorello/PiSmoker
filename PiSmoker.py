@@ -371,15 +371,16 @@ def NextProgram(Parameters, Program):
 	return (Parameters, Program)
 
 def SetProgram(Parameters, Program):
-	Parameters['ProgramToggle'] = time.time()
+	if len(Program) > 0:
+		Parameters['ProgramToggle'] = time.time()
 
-	P = Program[0]
-	Parameters['mode'] = P['mode']
-	Parameters = SetMode(Parameters, Temps)
+		P = Program[0]
+		Parameters['mode'] = P['mode']
+		Parameters = SetMode(Parameters, Temps)
 
-	Parameters['target'] = P['target']
-	Control.setTarget(Parameters['target'])
-	Parameters = WriteParameters(Parameters)
+		Parameters['target'] = P['target']
+		Control.setTarget(Parameters['target'])
+		Parameters = WriteParameters(Parameters)
 
 	return Parameters
 
