@@ -20,6 +20,7 @@ ParametersInterval = 1#Frequency to write parameters
 PIDCycleTime = 20#Frequency to update control loop
 ReadParametersInterval =3  #Frequency to poll web for new parameters
 ReadProgramInterval = 15 #Freqnency to poll web for new program
+LastProgramTime = time.time()
 u_min = 0.15 #Maintenance level
 u_max = 1.0 #
 IgniterTemperature = 100 #Temperature to start igniter
@@ -344,7 +345,7 @@ Parameters = WriteParameters(Parameters)
 Temps = [] #List, [time, T[0], T[1]...]
 Program = []
 ResetFirebase(Parameters)
-LastProgramTime = time.time()
+
 Parameters['LastReadWeb'] = time.time()
 
 #Set mode
