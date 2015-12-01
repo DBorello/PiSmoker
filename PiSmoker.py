@@ -19,6 +19,7 @@ TempRecord = 60 #Period to record temperatures in memory
 ParametersInterval = 1#Frequency to write parameters
 PIDCycleTime = 20#Frequency to update control loop
 ReadParametersInterval =3  #Frequency to poll web for new parameters
+ReadProgramInterval = 15 #Freqnency to poll web for new program
 u_min = 0.15 #Maintenance level
 u_max = 1.0 #
 IgniterTemperature = 100 #Temperature to start igniter
@@ -106,6 +107,7 @@ def ResetFirebase(Parameters):
 		r = firebase.put('/','Parameters',Parameters, params=Params)
 		r = firebase.delete('/','Temps', params=Params)
 		r = firebase.delete('/','Controls', params=Params)
+		r = firebase.delete('/','Program', params=Params)
 	except:
 		logger.info('Error initializing Firebase')
 
@@ -315,6 +317,22 @@ def DoControl(Parameters, Temps):
 		
 	return Parameters
 
+def GetProgram(Program):
+	if time.time() - LastProgramTime > ReadProgramInterval:
+		raw  = firebase.get('/Program', None)
+		NewProgram = []
+
+		for k in sorted(raw.items()):
+			NewProgram.append(k[1])
+
+		#Check if program is new
+		if Program != NewProgram:
+			pass #do something
+
+		LastProgramTime = time.time()
+
+	return NewProgram
+
 ##############
 #Setup       #
 ##############
@@ -324,11 +342,14 @@ Parameters = WriteParameters(Parameters)
 
 #Setup variables
 Temps = [] #List, [time, T[0], T[1]...]
+Program = []
 ResetFirebase(Parameters)
+LastProgramTime = time.time()
+Parameters['LastReadWeb'] = time.time()
 
 #Set mode
 SetMode(Parameters, Temps)
-Parameters['LastReadWeb'] = time.time()
+
 
 ###############
 #Main Loop    #
@@ -340,6 +361,9 @@ while 1:
 		
 	#Check for new parameters
 	Parameters = ReadParameters(Parameters, Temps)
+
+	#Check for new program
+	Program = GetProgram(Program)
 
 	#Do mode
 	Parameters = DoMode(Parameters,Temps)
