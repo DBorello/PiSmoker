@@ -188,6 +188,7 @@ def UpdateParameters(NewParameters,Parameters,Temps):
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
 				Parameters = SetProgram(Parameters, Program)
+				Parameters = WriteParameters(Parameters)
 
 
 	return Parameters
