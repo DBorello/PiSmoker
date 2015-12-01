@@ -150,11 +150,11 @@ def ReadParameters(Parameters, Temps, Program):
 		try:
 			NewParameters = firebase.get('/Parameters',None )
 			#logger.info('New parameters from firebase: %s',NewParameters)
-
+			Parameters = UpdateParameters(NewParameters,Parameters,Temps, Program)
 		except:
 			logger.info('Error reading parameters from Firebase')
 			return Parameters
-		Parameters = UpdateParameters(NewParameters,Parameters,Temps, Program)
+
 	return Parameters
 
 
