@@ -340,7 +340,7 @@ def GetProgram(Parameters, Program):
 	return Program
 
 def EvaluateTriggers(Parameters, Temps, Program):
-	if Parameters['program']:
+	if Parameters['program'] and len(Program) > 0:
 		P = Program[0]
 
 		if P['trigger'] == 'Time':
@@ -357,8 +357,10 @@ def NextProgram(Parameters, Program):
 	logger.info('Advancing to next program')
 	Program.pop(0) #Remove current program
 
-	Parameters = SetProgram(Program)
 	WriteProgram(Program)
+	if len(Program) > 0:
+		Parameters = SetProgram(Program)
+
 	return (Parameters, Program)
 
 def SetProgram(Parameters, Program):
