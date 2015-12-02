@@ -343,7 +343,7 @@ def DoControl(Parameters, Temps):
 	return Parameters
 
 def GetProgram(Parameters, Program):
-	if time.time() - Parameters['LastReadProgram'] > ReadProgramInterval:
+	if time.time() - Parameters['LastReadProgram'] > ReadProgramInterval and Parameters['program']:
 		try:
 			raw  = firebase.get('/Program', None)
 
