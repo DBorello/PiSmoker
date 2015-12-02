@@ -404,6 +404,11 @@ def SetProgram(Parameters, Program):
 		Control.setTarget(Parameters['target'])
 		Parameters = WriteParameters_sync(Parameters)
 
+	else:
+		logger.info('Last program reached, disabling program')
+		Parameters['program'] = False
+		Parameters = WriteParameters(Parameters)
+
 	return Parameters
 
 def WriteProgram(Program):
