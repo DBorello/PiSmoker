@@ -158,7 +158,7 @@ def ReadParameters(Parameters, Temps, Program):
 	#Read from queue
 	while not qR.empty():
 		NewParameters = qR.get()
-		Parameters = UpdateParameters(NewParameters,Parameters,Temps, Program)
+		(Parameters, Program) = UpdateParameters(NewParameters,Parameters,Temps, Program)
 		
 	#Read from webserver
 	if time.time() - Parameters['LastReadWeb'] > ReadParametersInterval:
@@ -166,12 +166,12 @@ def ReadParameters(Parameters, Temps, Program):
 		try:
 			NewParameters = firebase.get('/Parameters',None )
 			#logger.info('New parameters from firebase: %s',NewParameters)
-			Parameters = UpdateParameters(NewParameters,Parameters,Temps, Program)
+			(Parameters, Program) = UpdateParameters(NewParameters,Parameters,Temps, Program)
 		except:
 			logger.info('Error reading parameters from Firebase')
 			return Parameters
 
-	return Parameters
+	return (Parameters, Program)
 
 
 def UpdateParameters(NewParameters,Parameters,Temps, Program):
@@ -204,11 +204,12 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 			if Parameters[k] != NewParameters[k]:
 				logger.info('New Parameters: %s -- %s (%s)', k,NewParameters[k],Parameters[k])
 				Parameters[k] = NewParameters[k]
+				Program = GetProgram(Parameters, Program)
 				Parameters = SetProgram(Parameters, Program)
 				Parameters = WriteParameters(Parameters)
 
 
-	return Parameters
+	return (Parameters, Program)
 
 
 def GetAverageSince(Temps,startTime):
@@ -440,7 +441,7 @@ while 1:
 	Temps = RecordTemps(Parameters, Temps)
 		
 	#Check for new parameters
-	Parameters = ReadParameters(Parameters, Temps, Program)
+	(Parameters, Program) = ReadParameters(Parameters, Temps, Program)
 
 	#Check for new program
 	Program = GetProgram(Parameters, Program)
