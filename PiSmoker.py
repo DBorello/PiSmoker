@@ -383,6 +383,9 @@ def NextProgram(Parameters, Program):
 	WriteProgram(Program)
 	if len(Program) > 0:
 		Parameters = SetProgram(Parameters, Program)
+	else:
+		Parameters['program'] = False
+		Parameters = WriteParameters(Parameters)
 
 	return (Parameters, Program)
 
