@@ -207,6 +207,7 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 				Program = GetProgram(Parameters, Program)
 				Parameters = SetProgram(Parameters, Program)
 				Parameters = WriteParameters(Parameters)
+				break # Stop processing new parameters
 
 
 	return (Parameters, Program)
