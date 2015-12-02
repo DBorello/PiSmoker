@@ -169,7 +169,7 @@ def ReadParameters(Parameters, Temps, Program):
 			(Parameters, Program) = UpdateParameters(NewParameters,Parameters,Temps, Program)
 		except:
 			logger.info('Error reading parameters from Firebase')
-			return Parameters
+			return (Parameters, Program)
 
 	return (Parameters, Program)
 
@@ -207,8 +207,6 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 				Parameters['LastReadProgram'] = time.time() - 10000
 				Program = GetProgram(Parameters, Program)
 				Parameters = SetProgram(Parameters, Program)
-				Parameters = WriteParameters(Parameters)
-				time.sleep(0.1)
 				break # Stop processing new parameters
 
 
