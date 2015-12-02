@@ -405,7 +405,9 @@ def SetProgram(Parameters, Program):
 
 def WriteProgram(Program):
 	try:
-		r = firebase.post('/Program', Program , params=Params)
+		r = firebase.delete('/','Program', params=Params)
+		for P in Program:
+			r = firebase.post('/Temps', P, params=Params)
 	except:
 		logger.info('Error writing Program to Firebase')
 
