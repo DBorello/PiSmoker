@@ -384,6 +384,7 @@ def NextProgram(Parameters, Program):
 	if len(Program) > 0:
 		Parameters = SetProgram(Parameters, Program)
 	else:
+		logger.info('Last program reached, disabling program')
 		Parameters['program'] = False
 		Parameters = WriteParameters(Parameters)
 
