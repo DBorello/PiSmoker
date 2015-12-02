@@ -19,7 +19,7 @@ TempRecord = 60 #Period to record temperatures in memory
 ParametersInterval = 1#Frequency to write parameters
 PIDCycleTime = 20#Frequency to update control loop
 ReadParametersInterval =3  #Frequency to poll web for new parameters
-ReadProgramInterval = 15 #Freqnency to poll web for new program
+ReadProgramInterval = 5 #Freqnency to poll web for new program
 u_min = 0.15 #Maintenance level
 u_max = 1.0 #
 IgniterTemperature = 100 #Temperature to start igniter
@@ -407,7 +407,7 @@ def WriteProgram(Program):
 	try:
 		r = firebase.delete('/','Program', params=Params)
 		for P in Program:
-			r = firebase.post('/Temps', P, params=Params)
+			r = firebase.post('/Program', P, params=Params)
 	except:
 		logger.info('Error writing Program to Firebase')
 
