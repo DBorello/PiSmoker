@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="6eb39fec-b652-4f80-8e97-c1b8c0f17442" name="danieljborello.com" url="http://danieljborello.com">
-        <fileTransfer host="danieljborello.com" port="22" rootFolder="/home/dborello/www/htdocs/pis" accessType="SFTP" password="dfc0dfccdfc6df9ddfe1dfc8df9ddfeedfcddfe2dfcbdffddf9bdfdddfebdff8dffbdfc4dffedfc1" username="dborello">
+        <fileTransfer host="danieljborello.com" port="22" rootFolder="/home/dborello/www/htdocs/smoker" accessType="SFTP" password="dfc0dfccdfc6df9ddfe1dfc8df9ddfeedfcddfe2dfcbdffddf9bdfdddfebdff8dffbdfc4dffedfc1" username="dborello">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>

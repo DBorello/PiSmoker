@@ -6,15 +6,17 @@ var gG = new JustGage({
 	max: 500,
 	title: "Grill",
 	label: "F",
-	levelColorsGradient: false
+	levelColorsGradient: false,
+	decimals: 2
 });
 
 var gM = new JustGage({
 	id: "MeatGauge",
 	value: 00,
 	min: 0,
-	max: 200,
+	max: 2000,
 	title: "Meat",
 	label: "F",
-	levelColorsGradient: false
+	levelColorsGradient: false,
+	decimals: 2,
 });

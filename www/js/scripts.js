@@ -136,7 +136,8 @@ var gG = new JustGage({
 	max: 500,
 	title: "Grill",
 	label: "F",
-	levelColorsGradient: false
+	levelColorsGradient: false,
+	decimals: 1
 });
 
 var gM = new JustGage({
@@ -146,7 +147,8 @@ var gM = new JustGage({
 	max: 200,
 	title: "Meat",
 	label: "F",
-	levelColorsGradient: false
+	levelColorsGradient: false,
+	decimals: 1
 });
 
 
