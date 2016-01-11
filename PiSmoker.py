@@ -297,8 +297,9 @@ def DoAugerControl(Parameters,Temps):
 	if G.GetState('auger') and (time.time() - G.ToggleTime['auger']) > Parameters['CycleTime']*Parameters['u']:
 		if Parameters['u'] < 1.0:
 			G.SetState('auger',False)
+			WriteParameters(Parameters)
 		CheckIgniter(Parameters, Temps)
-		WriteParameters(Parameters)
+
 		
 	#Auger currently off AND TimeSinceToggle > Auger Off Time
 	if (not G.GetState('auger')) and (time.time() - G.ToggleTime['auger']) > Parameters['CycleTime']*(1-Parameters['u']):
@@ -316,6 +317,7 @@ def CheckIgniter(Parameters, Temps):
 
 		#Check if igniter has been running for too long
 		if (time.time() - G.ToggleTime['igniter']) > 600 and G.GetState('igniter'):
+			logger.info('Disabling igniter due to timeout')
 			G.SetState('igniter',False)
 			Parameters['mode'] = 'Shutdown'
 			Parameters = SetMode(Parameters, Temps)
