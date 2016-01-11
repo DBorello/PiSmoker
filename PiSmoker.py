@@ -193,6 +193,7 @@ def UpdateParameters(NewParameters,Parameters,Temps, Program):
 			if float(Parameters[k]) != float(NewParameters[k]):
 				logger.info('New Parameters: %s -- %f (%f)', k,float(NewParameters[k]),Parameters[k])
 				Parameters[k] = float(NewParameters[k])
+				Parameters = SetMode(Parameters, Temps)
 				Parameters = WriteParameters(Parameters)
 		elif k == 'mode':
 			if Parameters[k] != NewParameters[k]:
