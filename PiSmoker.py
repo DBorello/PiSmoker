@@ -35,8 +35,8 @@ logger = logging.getLogger('PiSmoker')
 
 #Initialize RTD Probes
 T = []
-T.append(MAX31865.MAX31865(1,1000,4000)) #Grill
-T.append(MAX31865.MAX31865(0,100,400)) #Meat
+T.append(MAX31865.MAX31865(1,1000,4000, false)) #Grill
+T.append(MAX31865.MAX31865(0,100,400, true)) #Meat
 
 
 #Initialize Traeger Object

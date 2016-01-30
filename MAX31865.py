@@ -8,9 +8,10 @@ logger = logging.getLogger(__name__)
 #Datasheet https://datasheets.maximintegrated.com/en/ds/MAX31865.pdf
 class MAX31865:
 
-	def __init__(self,cs,R_0,R_ref):
+	def __init__(self,cs,R_0,R_ref,ThreeWire):
 		
 		self.cs = cs
+		self.ThreeWire = ThreeWire
 	
 		#RTD Constants
 		self.R_0 = R_0
@@ -36,7 +37,10 @@ class MAX31865:
 		# Fault Detection
 		# Fault Status
 		# 50/60Hz (0 = 60 Hz)
-		config = 0b11000010 # 0xC2
+		if ThreeWire:
+			config = 0b11010010 # 0xC2
+		else:
+			config = 0b11000010 # 0xC2
 
 		self.spi.xfer2([0x80,0xC2])
 		time.sleep(0.25)
