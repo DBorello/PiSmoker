@@ -37,7 +37,7 @@ class MAX31865:
 		# Fault Detection
 		# Fault Status
 		# 50/60Hz (0 = 60 Hz)
-		if ThreeWire:
+		if self.ThreeWire:
 			config = 0b11010010 # 0xC2
 		else:
 			config = 0b11000010 # 0xC2
