@@ -279,7 +279,7 @@ def DoMode(Parameters,Temps):
 	elif Parameters['mode'] == 'Start':
 		DoAugerControl(Parameters,Temps) #
 		G.SetState('igniter',True)
-		if Temps[-1][1] > Parameters['target']:
+		if Temps[-1][1] > 115:
 			Parameters['mode'] = 'Hold'
 			Parameters = SetMode(Parameters, Temps)
 
