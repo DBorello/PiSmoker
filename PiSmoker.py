@@ -243,7 +243,7 @@ def SetMode(Parameters, Temps):
 	elif Parameters['mode'] == 'Start':
 		G.SetState('fan',True)
 		G.SetState('auger',True)
-		CheckIgniter(Parameters, Temps)
+		G.SetState('igniter',True)
 		Parameters['CycleTime'] = 15+45
 		Parameters['u'] = 15.0/(15.0+45.0) #P0
 
@@ -262,7 +262,7 @@ def SetMode(Parameters, Temps):
 		CheckIgniter(Parameters, Temps)
 		Parameters['CycleTime'] = PIDCycleTime
 		Parameters['u'] = u_min #Set to maintenance level
-		
+
 	WriteParameters(Parameters)	
 	return Parameters	
 
@@ -278,7 +278,8 @@ def DoMode(Parameters,Temps):
 		
 	elif Parameters['mode'] == 'Start':
 		DoAugerControl(Parameters,Temps) #
-		if Temps[-1][1] > 115:
+		G.SetState('igniter',True)
+		if Temps[-1][1] > Parameters['target']:
 			Parameters['mode'] = 'Hold'
 			Parameters = SetMode(Parameters, Temps)
 
