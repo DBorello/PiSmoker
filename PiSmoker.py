@@ -255,6 +255,15 @@ def SetMode(Parameters, Temps):
 		Off = 45 + Parameters['PMode']*10 #http://tipsforbbq.com/Definition/Traeger-P-Setting
 		Parameters['CycleTime'] = On + Off
 		Parameters['u'] = On / (On+Off)
+
+	elif Parameters['mode'] == 'Ignite': #Similar to smoke, with igniter on
+		G.SetState('fan',True)
+		G.SetState('auger',True)
+		G.SetState('igniter',True)
+		On = 15
+		Off = 45 + Parameters['PMode']*10 #http://tipsforbbq.com/Definition/Traeger-P-Setting
+		Parameters['CycleTime'] = On + Off
+		Parameters['u'] = On / (On+Off)
 		
 	elif Parameters['mode'] == 'Hold':
 		G.SetState('fan',True)
@@ -285,6 +294,10 @@ def DoMode(Parameters,Temps):
 
 	elif Parameters['mode'] == 'Smoke':
 		DoAugerControl(Parameters,Temps)
+
+	elif Parameters['mode'] == 'Ignite':
+		DoAugerControl(Parameters,Temps)
+		G.SetState('igniter',True)
 
 	elif Parameters['mode'] == 'Hold':
 		Parameters = DoControl(Parameters,Temps)
@@ -318,7 +331,7 @@ def CheckIgniter(Parameters, Temps):
 			G.SetState('igniter',False)
 
 		#Check if igniter has been running for too long
-		if (time.time() - G.ToggleTime['igniter']) > 600 and G.GetState('igniter'):
+		if (time.time() - G.ToggleTime['igniter']) > 1200 and G.GetState('igniter'):
 			logger.info('Disabling igniter due to timeout')
 			G.SetState('igniter',False)
 			Parameters['mode'] = 'Shutdown'
