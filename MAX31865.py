@@ -38,11 +38,11 @@ class MAX31865:
 		# Fault Status
 		# 50/60Hz (0 = 60 Hz)
 		if self.ThreeWire:
-			config = 0b11010010 # 0xC2
+			config = 0b11010010 # 0xD2
 		else:
 			config = 0b11000010 # 0xC2
 
-		self.spi.xfer2([0x80,0xC2])
+		self.spi.xfer2([0x80,config])
 		time.sleep(0.25)
 		self.read()
 	
