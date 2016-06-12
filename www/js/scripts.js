@@ -158,7 +158,7 @@ var TempsRef = Ref.child('Temps');
 var ParametersRef = Ref.child('Parameters');
 var ProgramRef = Ref.child('Program');
 
-TempsRef.once("value", function(snapshot) {
+TempsRef.limitToLast(19200).once("value", function(snapshot) { //Limit to last 16 hours
 	var Ts = snapshot.val();
 	for (var k in Ts) {
 		T1.push([Ts[k].time, Ts[k].T1]);
