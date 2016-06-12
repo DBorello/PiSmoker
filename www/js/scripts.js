@@ -158,7 +158,7 @@ var TempsRef = Ref.child('Temps');
 var ParametersRef = Ref.child('Parameters');
 var ProgramRef = Ref.child('Program');
 
-TempsRef.limitToLast(19200).once("value", function(snapshot) { //Limit to last 16 hours
+TempsRef.limitToLast(3600/3*16).once("value", function(snapshot) { //Limit to last 16 hours
 	var Ts = snapshot.val();
 	for (var k in Ts) {
 		T1.push([Ts[k].time, Ts[k].T1]);
@@ -172,6 +172,7 @@ TempsRef.limitToLast(19200).once("value", function(snapshot) { //Limit to last 1
 		TT.push([Ts.time, Ts.TT])
 		UpdatePlot()
 	});
+	UpdatePlot();
 });
 TempsRef.on("child_removed", function(snapshot, prevChildKey) {
   T1 = []
