@@ -75,7 +75,7 @@ class PID:
 		logger.info('New Target: %f',setPoint)
 
 	def setGains(self, PB, Ti, Td):
-		self.CalculateGains(PB,Ti,Kd)
+		self.CalculateGains(PB,Ti,Td)
 		self.Inter_max = abs(0.5/self.Ki)
 		logger.info('New Gains (%f,%f,%f)', self.Kp, self.Ki, self.Kd)
 
